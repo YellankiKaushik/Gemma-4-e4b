@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { isAllowedLocalEndpoint } from "./local-endpoint";
-import { chatStream, resolvePreferredModel, type ChatChunk } from "./ollama";
+import { chatStream, listModels, resolvePreferredModel, type ChatChunk } from "./ollama";
 import { AppError, type LocalModel } from "./types";
 
 function models(...names: string[]): LocalModel[] {
@@ -78,8 +78,39 @@ describe("local endpoint validation", () => {
 
     it("rejects remote and non-loopback endpoints", () => {
         expect(isAllowedLocalEndpoint("https://example.com")).toBe(false);
+        expect(isAllowedLocalEndpoint("http://example.com")).toBe(false);
         expect(isAllowedLocalEndpoint("http://google.com")).toBe(false);
         expect(isAllowedLocalEndpoint("http://192.168.1.2:11434")).toBe(false);
+        expect(isAllowedLocalEndpoint("http://localhost:11434/api/chat")).toBe(false);
+        expect(isAllowedLocalEndpoint("http://user:pass@localhost:11434")).toBe(false);
+    });
+});
+
+describe("listModels", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("maps Ollama origin rejection to a specific error", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => new Response("origin blocked", { status: 403 })),
+        );
+
+        await expect(listModels("http://localhost:11434")).rejects.toMatchObject({
+            code: "OLLAMA_ORIGIN_REJECTED",
+        });
+    });
+
+    it("maps local runtime failures to a specific error", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => new Response("cuda runtime failed", { status: 500 })),
+        );
+
+        await expect(listModels("http://localhost:11434")).rejects.toMatchObject({
+            code: "LOCAL_MODEL_RUNTIME_ERROR",
+        });
     });
 });
 
@@ -133,6 +164,67 @@ describe("chatStream", () => {
         await expect(collectCurrentStream(controller.signal)).rejects.toBeInstanceOf(AppError);
         await expect(collectCurrentStream(controller.signal)).rejects.toMatchObject({
             code: "REQUEST_ABORTED",
+        });
+    });
+
+    it("maps aborts during an active stream to REQUEST_ABORTED", async () => {
+        const controller = new AbortController();
+        const encoder = new TextEncoder();
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => {
+                const stream = new ReadableStream<Uint8Array>({
+                    start(streamController) {
+                        streamController.enqueue(
+                            encoder.encode('{"message":{"content":"partial"},"done":false}\n'),
+                        );
+                        controller.signal.addEventListener("abort", () => {
+                            streamController.error(
+                                new DOMException("This operation was aborted", "AbortError"),
+                            );
+                        });
+                    },
+                });
+                return new Response(stream, { status: 200 });
+            }),
+        );
+
+        const iterator = chatStream(
+            {
+                endpoint: "http://localhost:11434",
+                model: "gemma4:e4b",
+                messages: [{ role: "user", content: "test" }],
+            },
+            controller.signal,
+        );
+
+        await expect(iterator.next()).resolves.toMatchObject({
+            value: { content: "partial", done: false },
+            done: false,
+        });
+        controller.abort();
+        await expect(iterator.next()).rejects.toMatchObject({ code: "REQUEST_ABORTED" });
+    });
+
+    it("maps chat origin rejection to a specific error", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => new Response("origin blocked", { status: 403 })),
+        );
+
+        await expect(collectCurrentStream()).rejects.toMatchObject({
+            code: "OLLAMA_ORIGIN_REJECTED",
+        });
+    });
+
+    it("maps chat runtime failures to a specific error", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => new Response("cuda runtime failed", { status: 500 })),
+        );
+
+        await expect(collectCurrentStream()).rejects.toMatchObject({
+            code: "LOCAL_MODEL_RUNTIME_ERROR",
         });
     });
 });

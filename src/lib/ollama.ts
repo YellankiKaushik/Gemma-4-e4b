@@ -48,7 +48,22 @@ export async function listModels(endpoint: string, timeoutMs = 3000): Promise<Lo
     }
 
     if (!res.ok) {
-        throw new AppError("LOCAL_RUNTIME_UNREACHABLE", `Runtime responded ${res.status}`);
+        const text = await res.text().catch(() => "");
+        if (res.status === 403) {
+            throw new AppError(
+                "OLLAMA_ORIGIN_REJECTED",
+                "Ollama rejected this Chrome extension origin. Allow this extension using OLLAMA_ORIGINS and restart Ollama.",
+                text,
+            );
+        }
+        if (res.status >= 500) {
+            throw new AppError(
+                "LOCAL_MODEL_RUNTIME_ERROR",
+                `Ollama returned ${res.status}. The local model runtime failed.`,
+                text,
+            );
+        }
+        throw new AppError("LOCAL_RUNTIME_UNREACHABLE", `Runtime responded ${res.status}`, text);
     }
 
     const data = (await res.json()) as {
@@ -153,6 +168,20 @@ export async function* chatStream(
             throw new AppError(
                 "MODEL_NOT_FOUND",
                 `Model "${request.model}" is not installed`,
+                text,
+            );
+        }
+        if (res.status === 403) {
+            throw new AppError(
+                "OLLAMA_ORIGIN_REJECTED",
+                "Ollama rejected this Chrome extension origin. Allow this extension using OLLAMA_ORIGINS and restart Ollama.",
+                text,
+            );
+        }
+        if (res.status >= 500) {
+            throw new AppError(
+                "LOCAL_MODEL_RUNTIME_ERROR",
+                `Ollama returned ${res.status}. The local model runtime failed.`,
                 text,
             );
         }

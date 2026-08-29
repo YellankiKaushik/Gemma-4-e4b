@@ -41,6 +41,8 @@ export type AppErrorCode =
     | "LOCAL_RUNTIME_UNREACHABLE"
     | "MODEL_NOT_FOUND"
     | "MODEL_REQUEST_REJECTED"
+    | "OLLAMA_ORIGIN_REJECTED"
+    | "LOCAL_MODEL_RUNTIME_ERROR"
     | "STREAM_PARSE_ERROR"
     | "REQUEST_ABORTED"
     | "CONTEXT_LIMIT"
@@ -63,6 +65,10 @@ export const ERROR_GUIDANCE: Record<AppErrorCode, string> = {
         "The local Ollama runtime could not be reached. Start Ollama and allow this origin.",
     MODEL_NOT_FOUND: "The selected model is no longer installed. Pick another model.",
     MODEL_REQUEST_REJECTED: "Ollama rejected the request.",
+    OLLAMA_ORIGIN_REJECTED:
+        "Ollama rejected this Chrome extension origin. Allow this extension using OLLAMA_ORIGINS and restart Ollama.",
+    LOCAL_MODEL_RUNTIME_ERROR:
+        "The local model runtime failed inside Ollama. Check Ollama logs or retry after restarting the runtime.",
     STREAM_PARSE_ERROR: "The response stream was malformed. Try again.",
     REQUEST_ABORTED: "Generation stopped.",
     CONTEXT_LIMIT: "Context limit reached. Start a new chat or reduce history depth.",

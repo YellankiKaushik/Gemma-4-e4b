@@ -1,8 +1,10 @@
 node_modules
 dist
+release
 .output
 .vinxi
 pnpm-lock.yaml
 package-lock.json
 CODEX_PROJECT_AUDIT.md
 CODEX_EXTENSION_IMPLEMENTATION_REPORT.md
+CODEX_RELEASE_HARDENING_REPORT.md

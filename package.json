@@ -11,7 +11,9 @@
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
         "format": "prettier --write .",
-        "test": "vitest run"
+        "test": "vitest run",
+        "verify:extension": "node scripts/verify-extension-package.mjs",
+        "package": "node scripts/package-extension.mjs"
     },
     "dependencies": {
         "@radix-ui/react-label": "^2.1.8",
