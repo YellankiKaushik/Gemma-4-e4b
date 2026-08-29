@@ -56,7 +56,10 @@ export function ConversationList({
                             )}
                         >
                             <MessageSquare
-                                className={cn("size-4 shrink-0", active ? "text-primary" : "text-muted-foreground")}
+                                className={cn(
+                                    "size-4 shrink-0",
+                                    active ? "text-primary" : "text-muted-foreground",
+                                )}
                             />
                             {editingId === c.id ? (
                                 <Input
@@ -83,7 +86,9 @@ export function ConversationList({
                                     className="min-w-0 flex-1 text-left"
                                 >
                                     <span className="block truncate text-sm">{c.title}</span>
-                                    <span className="tag-mono block truncate text-muted-foreground">{c.model}</span>
+                                    <span className="tag-mono block truncate text-muted-foreground">
+                                        {c.model}
+                                    </span>
                                 </button>
                             )}
                             <div className="flex shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
