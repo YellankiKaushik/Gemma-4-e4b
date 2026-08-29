@@ -40,12 +40,17 @@ export function ChatView({
                     {messages.length === 0 ? (
                         <div className="panel-grid mt-10 rounded-xl border border-border bg-surface/60 p-8 text-center">
                             <Cpu className="mx-auto size-6 text-primary" />
-                            <h2 className="mt-3 text-lg font-semibold">Everything runs on your machine</h2>
+                            <h2 className="mt-3 text-lg font-semibold">
+                                Everything runs on your machine
+                            </h2>
                             <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-                                Prompts go straight to your local Ollama runtime. No accounts, no API keys, no
-                                telemetry — conversations are stored only in this browser.
+                                Prompts go straight to your local Ollama runtime. No accounts, no
+                                API keys, no telemetry — conversations are stored only in this
+                                browser.
                             </p>
-                            <p className="tag-mono mt-4 text-primary">{model ?? "no model selected"}</p>
+                            <p className="tag-mono mt-4 text-primary">
+                                {model ?? "no model selected"}
+                            </p>
                         </div>
                     ) : null}
 
@@ -58,8 +63,14 @@ export function ChatView({
                             )}
                         >
                             <div className="tag-mono flex items-center gap-2 text-muted-foreground">
-                                <span>{m.role === "user" ? "you" : (m.generation?.model ?? "assistant")}</span>
-                                {m.status === "stopped" ? <span className="text-warning">stopped</span> : null}
+                                <span>
+                                    {m.role === "user"
+                                        ? "you"
+                                        : (m.generation?.model ?? "assistant")}
+                                </span>
+                                {m.status === "stopped" ? (
+                                    <span className="text-warning">stopped</span>
+                                ) : null}
                                 {m.status === "error" ? (
                                     <span className="text-destructive">{m.errorCode}</span>
                                 ) : null}
@@ -71,14 +82,19 @@ export function ChatView({
                                     m.role === "user"
                                         ? "border-border bg-surface-raised"
                                         : "border-border bg-surface",
-                                    m.status === "error" && "border-destructive/50 bg-destructive/10",
+                                    m.status === "error" &&
+                                        "border-destructive/50 bg-destructive/10",
                                 )}
                             >
                                 {m.status === "error" ? (
                                     <div className="flex gap-2 text-sm">
                                         <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
                                         <div>
-                                            <p>{m.errorCode ? ERROR_GUIDANCE[m.errorCode] : "Request failed."}</p>
+                                            <p>
+                                                {m.errorCode
+                                                    ? ERROR_GUIDANCE[m.errorCode]
+                                                    : "Request failed."}
+                                            </p>
                                             {m.content ? (
                                                 <p className="mt-1 font-mono text-xs text-muted-foreground break-words">
                                                     {m.content}
@@ -89,7 +105,9 @@ export function ChatView({
                                 ) : (
                                     <>
                                         <MessageContent content={m.content} />
-                                        {m.status === "streaming" ? <span className="stream-caret" /> : null}
+                                        {m.status === "streaming" ? (
+                                            <span className="stream-caret" />
+                                        ) : null}
                                     </>
                                 )}
                             </div>
@@ -130,11 +148,21 @@ export function ChatView({
                         className="max-h-40 min-h-9 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-muted-foreground"
                     />
                     {busy ? (
-                        <Button variant="secondary" size="icon" onClick={onStop} aria-label="Stop generating">
+                        <Button
+                            variant="secondary"
+                            size="icon"
+                            onClick={onStop}
+                            aria-label="Stop generating"
+                        >
                             <Square className="size-4" />
                         </Button>
                     ) : (
-                        <Button size="icon" onClick={submit} disabled={!input.trim()} aria-label="Send message">
+                        <Button
+                            size="icon"
+                            onClick={submit}
+                            disabled={!input.trim()}
+                            aria-label="Send message"
+                        >
                             <ArrowUp className="size-4" />
                         </Button>
                     )}
