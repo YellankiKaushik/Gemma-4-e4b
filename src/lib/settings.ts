@@ -2,6 +2,7 @@
 // fallback only keeps regular-browser development usable.
 import { DEFAULT_ENDPOINT } from "./ollama";
 import { coerceLocalEndpoint } from "./local-endpoint";
+import { normalizeThemeMode } from "./theme";
 import type { Settings } from "./types";
 
 const KEY = "local-ai-side-panel:settings";
@@ -13,6 +14,7 @@ export const defaultSettings: Settings = {
     temperature: 0.7,
     historyLimit: 20,
     onboardingComplete: false,
+    theme: "system",
 };
 
 function normalizeSettings(settings: Partial<Settings>): Settings {
@@ -28,6 +30,7 @@ function normalizeSettings(settings: Partial<Settings>): Settings {
             typeof settings.historyLimit === "number" && Number.isFinite(settings.historyLimit)
                 ? settings.historyLimit
                 : defaultSettings.historyLimit,
+        theme: normalizeThemeMode(settings.theme),
     };
 }
 
