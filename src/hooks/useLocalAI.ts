@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { conversationRepository, uuid } from "@/lib/db";
+import { isAllowedLocalEndpoint, normalizeLocalEndpoint } from "@/lib/local-endpoint";
 import { chatStream, listModels, resolvePreferredModel } from "@/lib/ollama";
 import { defaultSettings, loadSettings, saveSettings } from "@/lib/settings";
 import {
@@ -25,11 +26,25 @@ export function useLocalAI() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [phase, setPhase] = useState<ChatPhase>("idle");
     const abortRef = useRef<AbortController | null>(null);
+    const bootedRef = useRef(false);
+    const previousEndpointRef = useRef(defaultSettings.endpoint);
 
     const patchSettings = useCallback((patch: Partial<Settings>) => {
+        if (patch.endpoint !== undefined) {
+            const endpoint = normalizeLocalEndpoint(patch.endpoint);
+            if (!endpoint) {
+                setRuntimeState("runtime_unavailable");
+                setRuntimeDetail(
+                    "Only http://localhost:<port> and http://127.0.0.1:<port> endpoints are allowed.",
+                );
+                return;
+            }
+            patch.endpoint = endpoint;
+        }
+
         setSettings((prev) => {
             const next = { ...prev, ...patch };
-            saveSettings(next);
+            void saveSettings(next);
             return next;
         });
     }, []);
@@ -46,7 +61,11 @@ export function useLocalAI() {
                     return;
                 }
                 const preferred = resolvePreferredModel(discovered, previouslySelected);
-                patchSettings({ selectedModel: preferred, onboardingComplete: true });
+                setSettings((prev) => {
+                    const next = { ...prev, selectedModel: preferred, onboardingComplete: true };
+                    void saveSettings(next);
+                    return next;
+                });
                 setRuntimeState("ready");
             } catch (err) {
                 setModels([]);
@@ -54,23 +73,43 @@ export function useLocalAI() {
                 setRuntimeState("runtime_unavailable");
             }
         },
-        [patchSettings],
+        [],
     );
 
     // Boot: load settings, history, then preflight.
     useEffect(() => {
-        const stored = loadSettings();
-        setSettings(stored);
-        conversationRepository
-            .listConversations()
-            .then((list) => {
-                setConversations(list);
-                if (list[0]) setActiveId(list[0].id);
-            })
-            .catch(() => undefined);
-        void runPreflight(stored.endpoint, stored.selectedModel);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        let cancelled = false;
+
+        async function boot() {
+            const stored = await loadSettings();
+            if (cancelled) return;
+            setSettings(stored);
+            previousEndpointRef.current = stored.endpoint;
+            conversationRepository
+                .listConversations()
+                .then((list) => {
+                    if (cancelled) return;
+                    setConversations(list);
+                    if (list[0]) setActiveId(list[0].id);
+                })
+                .catch(() => undefined);
+            void runPreflight(stored.endpoint, stored.selectedModel).finally(() => {
+                bootedRef.current = true;
+            });
+        }
+
+        void boot();
+        return () => {
+            cancelled = true;
+        };
+    }, [runPreflight]);
+
+    useEffect(() => {
+        if (!bootedRef.current || settings.endpoint === previousEndpointRef.current) return;
+        previousEndpointRef.current = settings.endpoint;
+        if (!isAllowedLocalEndpoint(settings.endpoint)) return;
+        void runPreflight(settings.endpoint, settings.selectedModel);
+    }, [runPreflight, settings.endpoint, settings.selectedModel]);
 
     useEffect(() => {
         if (!activeId) {
@@ -229,15 +268,7 @@ export function useLocalAI() {
             await refreshConversations();
             setPhase("idle");
         },
-        [
-            activeId,
-            conversations,
-            messages,
-            newConversation,
-            phase,
-            refreshConversations,
-            settings,
-        ],
+        [activeId, conversations, messages, newConversation, phase, refreshConversations, settings],
     );
 
     const clearAll = useCallback(async () => {
