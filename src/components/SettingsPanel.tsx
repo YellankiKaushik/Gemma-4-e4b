@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/MessageContent";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
+import { getExtensionOrigin } from "@/lib/extension-origin";
 import { isAllowedLocalEndpoint, normalizeLocalEndpoint } from "@/lib/local-endpoint";
-import type { LocalModel, Settings, ThemeMode } from "@/lib/types";
+import type { LocalModel, RuntimeState, Settings, ThemeMode } from "@/lib/types";
 
 // FR-013 / FR-018 — settings + local export & clear (§12.6).
 export function SettingsPanel({
     settings,
+    runtimeState,
     models,
     onChange,
     onExport,
     onClearAll,
 }: {
     settings: Settings;
+    runtimeState: RuntimeState;
     models: LocalModel[];
     onChange: (patch: Partial<Settings>) => void;
     onExport: () => void;
@@ -26,6 +30,8 @@ export function SettingsPanel({
     const normalizedEndpoint = normalizeLocalEndpoint(endpointDraft);
     const endpointChanged = normalizedEndpoint !== null && normalizedEndpoint !== settings.endpoint;
     const endpointValid = isAllowedLocalEndpoint(endpointDraft);
+    const extensionOrigin = getExtensionOrigin();
+    const runtimeConnected = runtimeState === "ready";
 
     useEffect(() => {
         setEndpointDraft(settings.endpoint);
@@ -217,8 +223,20 @@ export function SettingsPanel({
                 <section className="space-y-2 rounded-xl border border-border bg-surface p-4">
                     <h3 className="text-base font-semibold">Runtime</h3>
                     <p className="text-sm text-muted-foreground">
-                        Ollama requests stay on the configured loopback endpoint.
+                        Ollama status: {runtimeConnected ? "Connected" : "Unavailable"}
                     </p>
+                    <div className="space-y-1">
+                        <p className="text-xs font-medium text-muted-foreground">
+                            Extension origin
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <p className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
+                                {extensionOrigin}
+                            </p>
+                            <CopyButton value={extensionOrigin} label="Copy" />
+                        </div>
+                    </div>
+                    <p className="text-xs font-medium text-muted-foreground">Endpoint</p>
                     <p className="truncate font-mono text-xs text-muted-foreground">
                         {settings.endpoint}
                     </p>
