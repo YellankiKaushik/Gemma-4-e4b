@@ -52,13 +52,13 @@ export function RuntimePanel({
                     {unreachable ? (
                         <>
                             This app talks directly to Ollama at{" "}
-                            <span className="font-mono text-foreground">{endpoint}</span>. Nothing leaves your
-                            machine. Start the runtime and allow this browser origin.
+                            <span className="font-mono text-foreground">{endpoint}</span>. Nothing
+                            leaves your machine. Start the runtime and allow this browser origin.
                         </>
                     ) : (
                         <>
-                            Ollama is running but no models are installed. Pull a Gemma model to get started —
-                            models are never downloaded automatically.
+                            Ollama is running but no models are installed. Pull a Gemma model to get
+                            started — models are never downloaded automatically.
                         </>
                     )}
                 </p>
@@ -71,14 +71,16 @@ export function RuntimePanel({
                     <pre className="overflow-x-auto p-3 font-mono text-[0.8125rem] leading-relaxed text-foreground">
                         <code>
                             {unreachable
-                                ? `# 1. start the runtime\nollama serve\n\n# 2. allow this origin (new terminal)\nOLLAMA_ORIGINS="${typeof window === "undefined" ? "http://localhost:8080" : window.location.origin}" ollama serve`
-                                : `ollama pull gemma3:4b\nollama list`}
+                                ? `# 1. start the runtime\nollama serve\n\n# 2. if Chrome blocks the extension origin, restart Ollama with:\nOLLAMA_ORIGINS="${typeof window === "undefined" ? "chrome-extension://*" : window.location.origin}" ollama serve`
+                                : `ollama pull gemma4:e4b\nollama list`}
                         </code>
                     </pre>
                 </div>
 
                 {detail ? (
-                    <p className="mt-3 font-mono text-xs text-muted-foreground break-words">{detail}</p>
+                    <p className="mt-3 font-mono text-xs text-muted-foreground break-words">
+                        {detail}
+                    </p>
                 ) : null}
 
                 <Button className="mt-5" onClick={onRetry}>
