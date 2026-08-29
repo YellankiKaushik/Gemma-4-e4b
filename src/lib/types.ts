@@ -2,6 +2,8 @@
 
 export type MessageRole = "system" | "user" | "assistant";
 export type MessageStatus = "complete" | "streaming" | "stopped" | "error";
+export type ThemeMode = "system" | "light" | "dark";
+export type ResolvedTheme = "light" | "dark";
 
 export interface GenerationMeta {
     model?: string | undefined;
@@ -87,4 +89,5 @@ export interface Settings {
     temperature: number;
     historyLimit: number;
     onboardingComplete: boolean;
+    theme: ThemeMode;
 }
