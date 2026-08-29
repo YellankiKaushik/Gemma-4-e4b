@@ -32,15 +32,19 @@ export function ConversationList({
                 </Button>
             </div>
 
-            <div className="tag-mono px-4 pb-2 text-muted-foreground">
-                history · {conversations.length}
+            <div className="flex items-center justify-between px-4 pb-2 text-xs text-muted-foreground">
+                <span>Conversations</span>
+                <span>{conversations.length}</span>
             </div>
 
             <div className="flex-1 space-y-1 overflow-y-auto px-2 pb-3">
                 {conversations.length === 0 ? (
-                    <p className="px-2 py-6 text-center text-xs text-muted-foreground">
-                        No conversations yet. Everything you start stays on this machine.
-                    </p>
+                    <div className="mx-1 rounded-xl border border-dashed border-border bg-sidebar-accent/50 px-4 py-6 text-center">
+                        <p className="text-sm font-medium">No conversations yet</p>
+                        <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                            Your chats stay on this device.
+                        </p>
+                    </div>
                 ) : null}
 
                 {conversations.map((c) => {
@@ -49,10 +53,10 @@ export function ConversationList({
                         <div
                             key={c.id}
                             className={cn(
-                                "group flex items-center gap-2 rounded-md border border-transparent px-2 py-2 transition-colors",
+                                "group flex min-h-12 items-center gap-2 rounded-lg border border-transparent px-2 py-2 transition-colors",
                                 active
-                                    ? "border-border bg-sidebar-accent"
-                                    : "hover:border-border hover:bg-sidebar-accent/60",
+                                    ? "border-sidebar-border bg-sidebar-accent"
+                                    : "hover:bg-sidebar-accent/70",
                             )}
                         >
                             <MessageSquare
@@ -77,7 +81,7 @@ export function ConversationList({
                                         }
                                         if (e.key === "Escape") setEditingId(null);
                                     }}
-                                    className="h-7 text-xs"
+                                    className="h-8 text-sm"
                                 />
                             ) : (
                                 <button
@@ -85,8 +89,10 @@ export function ConversationList({
                                     onClick={() => onSelect(c.id)}
                                     className="min-w-0 flex-1 text-left"
                                 >
-                                    <span className="block truncate text-sm">{c.title}</span>
-                                    <span className="tag-mono block truncate text-muted-foreground">
+                                    <span className="block truncate text-sm font-medium">
+                                        {c.title}
+                                    </span>
+                                    <span className="block truncate font-mono text-[11px] text-muted-foreground">
                                         {c.model}
                                     </span>
                                 </button>
@@ -95,7 +101,7 @@ export function ConversationList({
                                 <button
                                     type="button"
                                     aria-label="Rename conversation"
-                                    className="rounded p-1 text-muted-foreground hover:text-foreground"
+                                    className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-surface-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                     onClick={() => {
                                         setDraft(c.title);
                                         setEditingId(c.id);
@@ -106,7 +112,7 @@ export function ConversationList({
                                 <button
                                     type="button"
                                     aria-label="Delete conversation"
-                                    className="rounded p-1 text-muted-foreground hover:text-destructive"
+                                    className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-surface-secondary hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                     onClick={() => onDelete(c.id)}
                                 >
                                     <Trash2 className="size-3.5" />
