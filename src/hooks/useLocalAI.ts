@@ -20,6 +20,7 @@ export function useLocalAI() {
     const [settings, setSettings] = useState<Settings>(defaultSettings);
     const [runtimeState, setRuntimeState] = useState<RuntimeState>("checking_runtime");
     const [runtimeDetail, setRuntimeDetail] = useState<string | undefined>();
+    const [runtimeErrorCode, setRuntimeErrorCode] = useState<AppErrorCode | undefined>();
     const [models, setModels] = useState<LocalModel[]>([]);
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -53,6 +54,7 @@ export function useLocalAI() {
         async (endpoint: string, previouslySelected: string | null) => {
             setRuntimeState("checking_runtime");
             setRuntimeDetail(undefined);
+            setRuntimeErrorCode(undefined);
             try {
                 const discovered = await listModels(endpoint);
                 setModels(discovered);
@@ -68,8 +70,11 @@ export function useLocalAI() {
                 });
                 setRuntimeState("ready");
             } catch (err) {
+                const appError =
+                    err instanceof AppError ? err : new AppError("UNKNOWN", String(err));
                 setModels([]);
-                setRuntimeDetail(err instanceof Error ? err.message : String(err));
+                setRuntimeDetail(appError.message);
+                setRuntimeErrorCode(appError.code);
                 setRuntimeState("runtime_unavailable");
             }
         },
@@ -247,9 +252,14 @@ export function useLocalAI() {
                     finalStatus = "error";
                     errorCode = appError.code;
                     acc = acc || appError.message;
-                    if (appError.code === "LOCAL_RUNTIME_UNREACHABLE") {
+                    if (
+                        appError.code === "LOCAL_RUNTIME_UNREACHABLE" ||
+                        appError.code === "OLLAMA_ORIGIN_REJECTED" ||
+                        appError.code === "LOCAL_MODEL_RUNTIME_ERROR"
+                    ) {
                         setRuntimeState("runtime_unavailable");
                         setRuntimeDetail(appError.message);
+                        setRuntimeErrorCode(appError.code);
                     }
                 }
             } finally {
@@ -294,6 +304,7 @@ export function useLocalAI() {
         patchSettings,
         runtimeState,
         runtimeDetail,
+        runtimeErrorCode,
         models,
         conversations,
         activeId,
