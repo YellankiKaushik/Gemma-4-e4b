@@ -38,12 +38,102 @@ function CopyButton({ value, label }: { value: string; label?: string }) {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1400);
             }}
-            className="tag-mono inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-raised px-2 py-1 text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-border bg-surface-raised px-2 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
             {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
             {label ?? (copied ? "copied" : "copy")}
         </button>
     );
+}
+
+function InlineText({ value }: { value: string }) {
+    return (
+        <>
+            {value.split(/(`[^`]+`)/g).map((part, index) =>
+                part.startsWith("`") && part.endsWith("`") && part.length > 1 ? (
+                    <code
+                        key={index}
+                        className="rounded bg-surface-secondary px-1 py-0.5 font-mono text-[0.875em]"
+                    >
+                        {part.slice(1, -1)}
+                    </code>
+                ) : (
+                    <span key={index}>{part}</span>
+                ),
+            )}
+        </>
+    );
+}
+
+function TextBlock({ content }: { content: string }) {
+    const lines = content.trim().split(/\n/);
+    const nodes = [];
+
+    for (let i = 0; i < lines.length; i += 1) {
+        const line = lines[i]?.trimEnd() ?? "";
+        if (!line.trim()) continue;
+
+        const heading = /^(#{1,3})\s+(.+)$/.exec(line);
+        if (heading) {
+            const level = heading[1]?.length ?? 1;
+            const className =
+                level === 1
+                    ? "mt-4 text-lg font-semibold first:mt-0"
+                    : "mt-3 text-base font-semibold first:mt-0";
+            nodes.push(
+                <p key={`heading-${i}`} className={className}>
+                    <InlineText value={heading[2] ?? ""} />
+                </p>,
+            );
+            continue;
+        }
+
+        if (/^[-*]\s+/.test(line)) {
+            const items = [];
+            while (i < lines.length && /^[-*]\s+/.test(lines[i]?.trim() ?? "")) {
+                items.push((lines[i]?.trim() ?? "").replace(/^[-*]\s+/, ""));
+                i += 1;
+            }
+            i -= 1;
+            nodes.push(
+                <ul key={`ul-${i}`} className="my-2 ml-5 list-disc space-y-1">
+                    {items.map((item, index) => (
+                        <li key={index}>
+                            <InlineText value={item} />
+                        </li>
+                    ))}
+                </ul>,
+            );
+            continue;
+        }
+
+        if (/^\d+\.\s+/.test(line)) {
+            const items = [];
+            while (i < lines.length && /^\d+\.\s+/.test(lines[i]?.trim() ?? "")) {
+                items.push((lines[i]?.trim() ?? "").replace(/^\d+\.\s+/, ""));
+                i += 1;
+            }
+            i -= 1;
+            nodes.push(
+                <ol key={`ol-${i}`} className="my-2 ml-5 list-decimal space-y-1">
+                    {items.map((item, index) => (
+                        <li key={index}>
+                            <InlineText value={item} />
+                        </li>
+                    ))}
+                </ol>,
+            );
+            continue;
+        }
+
+        nodes.push(
+            <p key={`p-${i}`} className="my-2 whitespace-pre-wrap first:mt-0 last:mb-0">
+                <InlineText value={line.trim()} />
+            </p>,
+        );
+    }
+
+    return <>{nodes}</>;
 }
 
 export function MessageContent({ content }: { content: string }) {
@@ -54,10 +144,12 @@ export function MessageContent({ content }: { content: string }) {
                 block.type === "code" ? (
                     <figure
                         key={i}
-                        className="overflow-hidden rounded-lg border border-border bg-background"
+                        className="overflow-hidden rounded-lg border border-border bg-surface-secondary"
                     >
                         <figcaption className="flex items-center justify-between border-b border-border bg-surface px-3 py-1.5">
-                            <span className="tag-mono text-muted-foreground">{block.lang}</span>
+                            <span className="font-mono text-xs text-muted-foreground">
+                                {block.lang}
+                            </span>
                             <CopyButton value={block.content} />
                         </figcaption>
                         <pre className="overflow-x-auto p-3 font-mono text-[0.8125rem] leading-relaxed">
@@ -65,9 +157,9 @@ export function MessageContent({ content }: { content: string }) {
                         </pre>
                     </figure>
                 ) : (
-                    <p key={i} className="whitespace-pre-wrap text-[0.9375rem] leading-relaxed">
-                        {block.content.trim()}
-                    </p>
+                    <div key={i} className="text-[0.9375rem] leading-7">
+                        <TextBlock content={block.content} />
+                    </div>
                 ),
             )}
         </div>
