@@ -52,7 +52,10 @@ export function MessageContent({ content }: { content: string }) {
         <div className="space-y-3">
             {blocks.map((block, i) =>
                 block.type === "code" ? (
-                    <figure key={i} className="overflow-hidden rounded-lg border border-border bg-background">
+                    <figure
+                        key={i}
+                        className="overflow-hidden rounded-lg border border-border bg-background"
+                    >
                         <figcaption className="flex items-center justify-between border-b border-border bg-surface px-3 py-1.5">
                             <span className="tag-mono text-muted-foreground">{block.lang}</span>
                             <CopyButton value={block.content} />
