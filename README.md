@@ -1,74 +1,35 @@
-# Gemma Local AI
+# Local AI Side Panel
 
-Gemma Local AI is a Chrome Manifest V3 side-panel extension for chatting with local Ollama-compatible models. The recommended default model is `gemma4:e4b`, and the extension discovers installed Ollama models through the local `/api/tags` endpoint.
+Local AI Side Panel is a Chrome Manifest V3 extension that puts a local AI chat client in Chrome's Side Panel. It connects directly to Ollama running on your computer and works with locally installed Ollama models, including Gemma.
 
-The intended data flow is local:
+The default recommended model is `gemma4:e4b`, but the extension discovers the models actually installed in Ollama and lets you choose among them.
 
 ```text
 Chrome extension
-  -> http://localhost:11434 or http://127.0.0.1:11434
-  -> Ollama
+  -> loopback Ollama API
   -> local model
 ```
 
-There is no project cloud inference backend, login system, Supabase dependency, analytics pipeline, or remote AI provider in the extension runtime.
+There is no project cloud inference backend, account system, Supabase dependency, analytics pipeline, or remote AI provider in the extension runtime.
 
-## Prerequisites
+## Installation
 
-- Google Chrome 116 or newer
-- Ollama installed and running
-- A local chat model installed in Ollama
-- Recommended model:
+1. Build the extension with `pnpm run build`.
+2. Open `chrome://extensions`.
+3. Enable Developer mode.
+4. Click Load unpacked.
+5. Select this repository's `dist/` directory.
+6. Click the Local AI Side Panel toolbar action to open the side panel.
 
-```sh
-ollama pull gemma4:e4b
-```
+## Build
 
-## Install Dependencies
+Install dependencies:
 
 ```sh
 pnpm install
 ```
 
-## Build
-
-```sh
-pnpm run build
-```
-
-The unpacked extension is emitted to `dist/`.
-
-## Development Installation In Chrome
-
-1. Open `chrome://extensions`.
-2. Enable Developer mode.
-3. Click Load unpacked.
-4. Select this repository's `dist/` directory.
-5. Click the Gemma Local AI toolbar action to open the side panel.
-
-The current development unpacked extension ID observed during QA is:
-
-```text
-iggagallhogkbgjndelifkdpfjbkahck
-```
-
-Do not assume this is the final Chrome Web Store ID. Chrome can assign a different ID depending on packaging, signing, and store publication.
-
-## Release Package
-
-```sh
-pnpm run package
-```
-
-This command builds the extension, verifies the MV3 package structure, and creates:
-
-```text
-release/Gemma-Local-AI-0.1.0.zip
-```
-
-The ZIP root contains `manifest.json`, `sidepanel.html`, `service-worker.js`, `assets/`, and `icons/`. It does not nest those files under `dist/`.
-
-## Verification
+Run checks:
 
 ```sh
 pnpm run format
@@ -77,67 +38,66 @@ pnpm run typecheck
 pnpm run test
 pnpm run build
 pnpm run verify:extension
-pnpm run package
 ```
 
-Optional direct Ollama checks:
+## Ollama Setup
+
+Install and start Ollama, then install at least one compatible local model.
+
+Recommended:
 
 ```sh
-curl http://localhost:11434/api/tags
-curl http://localhost:11434/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{"model":"gemma4:e4b","messages":[{"role":"user","content":"Reply with exactly: LOCAL_AI_TEST_OK"}],"stream":false}'
+ollama pull gemma4:e4b
 ```
 
-## Ollama Origin Setup
+Start Ollama:
 
-Chrome extension pages have a `chrome-extension://...` origin. If Ollama rejects that origin, restart Ollama with an allowed origin.
+```sh
+ollama serve
+```
 
-Development option:
+The extension can use only loopback endpoints:
+
+- `http://localhost:<port>`
+- `http://127.0.0.1:<port>`
+
+The default endpoint is:
+
+```text
+http://localhost:11434
+```
+
+## Extension-Origin Setup
+
+Chrome extension pages use a `chrome-extension://...` origin. If Ollama rejects the extension with HTTP 403, open Settings or the runtime setup panel and copy the exact extension origin shown there.
+
+Production-style scoped value:
+
+```text
+OLLAMA_ORIGINS=chrome-extension://<YOUR_CURRENT_EXTENSION_ID>
+```
+
+Windows PowerShell example:
+
+```powershell
+[Environment]::SetEnvironmentVariable("OLLAMA_ORIGINS","chrome-extension://<YOUR_CURRENT_EXTENSION_ID>","User")
+```
+
+Fully restart Ollama after changing environment variables.
+
+Development/troubleshooting wildcard:
 
 ```sh
 OLLAMA_ORIGINS=chrome-extension://* ollama serve
 ```
 
-More restrictive production-style option once the extension ID is known:
-
-```sh
-OLLAMA_ORIGINS=chrome-extension://<EXTENSION_ID> ollama serve
-```
-
-If you are using the current unpacked development ID from the QA run, the scoped value is:
-
-```sh
-OLLAMA_ORIGINS=chrome-extension://iggagallhogkbgjndelifkdpfjbkahck ollama serve
-```
-
-Fully restart Ollama after changing environment variables. The extension does not modify operating-system environment variables for you.
-
-## CUDA Troubleshooting
-
-On one Windows machine with an RTX 4050, Ollama/GGML failed with a local CUDA runtime error similar to:
-
-```text
-CUDA error: shared object initialization failed
-ggml_cuda_kernel_can_use_pdl
-```
-
-The observed workaround was to persist:
-
-```sh
-GGML_CUDA_PDL=0
-```
-
-Only set this if your local Ollama runtime needs it. This is an Ollama/GGML runtime workaround, not a Chrome extension setting, and the extension does not change it automatically.
+The wildcard allows other Chrome extensions to contact Ollama, so prefer the exact current extension origin when possible.
 
 ## Privacy
 
-Prompts and responses are sent only to the configured loopback Ollama endpoint. The extension accepts only:
+Prompts and responses are sent only to the configured loopback Ollama endpoint. Conversation history is stored in IndexedDB inside your Chrome profile. Settings, including theme, selected model, system prompt, temperature, and history depth, are stored in `chrome.storage.local`.
 
-- `http://localhost:<port>`
-- `http://127.0.0.1:<port>`
-
-Conversation history is stored in IndexedDB. Settings are stored in `chrome.storage.local` when running as an extension, with a localStorage fallback only for normal browser development.
+See `PRIVACY_POLICY.md` for the full privacy policy draft.
 
 ## Troubleshooting
 
@@ -153,26 +113,54 @@ No model found:
 - Install the recommended model with `ollama pull gemma4:e4b`.
 - Re-run preflight after the pull completes.
 
-403 origin error:
+HTTP 403 / extension origin rejected:
 
-- Ollama rejected the Chrome extension origin.
-- Set `OLLAMA_ORIGINS` to `chrome-extension://*` for development, or to `chrome-extension://<EXTENSION_ID>` once the ID is stable.
+- Copy the extension origin from Settings or the setup panel.
+- Add that origin to `OLLAMA_ORIGINS`.
 - Fully restart Ollama.
 
-500 local model runtime error:
+HTTP 500 / local runtime error:
 
 - The local Ollama/model runtime failed.
 - Restart Ollama and try again.
-- If you see the Windows RTX 4050 CUDA failure above, try `GGML_CUDA_PDL=0`.
+- Check Ollama logs for model or GPU runtime details.
 
-Extension reload:
+CUDA shared object initialization error:
 
-- Rebuild with `pnpm run build`.
-- Open `chrome://extensions`.
-- Click the reload button for Gemma Local AI.
-- Reopen the side panel and run preflight if needed.
+- Some systems may need the Ollama/GGML runtime workaround `GGML_CUDA_PDL=0`.
+- Set it only if you reproduce that specific local CUDA failure.
+- The extension does not set or require this environment variable.
 
-Model missing:
+## Development
 
-- The selected model may have been removed from Ollama.
-- Pull `gemma4:e4b` again or pick another discovered model in Settings.
+The extension is a plain Vite + React + TypeScript MV3 project. The side panel renders from `sidepanel.html`, and the service worker configures the toolbar action to open the side panel.
+
+Do not add content scripts, `activeTab`, broad host permissions, remote inference, analytics, or cloud sync for the v0.1 MVP.
+
+## Release Packaging
+
+Create the Chrome Web Store ZIP:
+
+```sh
+pnpm run package
+```
+
+Expected output:
+
+```text
+release/Local-AI-Side-Panel-0.1.0.zip
+```
+
+The ZIP root contains:
+
+```text
+manifest.json
+sidepanel.html
+service-worker.js
+assets/
+icons/
+```
+
+## Third-Party Attribution
+
+Local AI Side Panel is an independent project and is not affiliated with or endorsed by Ollama, Google, or the developers of individual supported models. Product names and trademarks belong to their respective owners.
