@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AlertTriangle, ArrowUp, Bot, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CopyButton, MessageContent } from "@/components/MessageContent";
+import { getExtensionOrigin, getWindowsOllamaOriginsCommand } from "@/lib/extension-origin";
 import { cn } from "@/lib/utils";
 import { ERROR_GUIDANCE, type Message } from "@/lib/types";
 import type { ChatPhase } from "@/hooks/useLocalAI";
@@ -22,6 +23,8 @@ export function ChatView({
     const [input, setInput] = useState("");
     const endRef = useRef<HTMLDivElement>(null);
     const busy = phase !== "idle";
+    const extensionOrigin = getExtensionOrigin();
+    const windowsCommand = getWindowsOllamaOriginsCommand(extensionOrigin);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ block: "end" });
@@ -43,7 +46,7 @@ export function ChatView({
                                 <Bot className="size-5" />
                             </span>
                             <h2 className="mt-4 text-xl font-semibold tracking-tight">
-                                Gemma Local AI
+                                Local AI Side Panel
                             </h2>
                             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
                                 Your local AI, running on this computer. Ask anything to get
@@ -100,6 +103,32 @@ export function ChatView({
                                                 <p className="mt-1 font-mono text-xs text-muted-foreground break-words">
                                                     {m.content}
                                                 </p>
+                                            ) : null}
+                                            {m.errorCode === "OLLAMA_ORIGIN_REJECTED" ? (
+                                                <div className="mt-3 space-y-3 rounded-xl border border-border bg-surface-secondary p-3">
+                                                    <div>
+                                                        <p className="text-xs font-medium text-muted-foreground">
+                                                            Extension origin
+                                                        </p>
+                                                        <p className="mt-1 break-all font-mono text-xs text-foreground">
+                                                            {extensionOrigin}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        <CopyButton
+                                                            value={extensionOrigin}
+                                                            label="Copy extension origin"
+                                                        />
+                                                        <CopyButton
+                                                            value={windowsCommand}
+                                                            label="Copy Windows command"
+                                                        />
+                                                    </div>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Restart Ollama completely after changing
+                                                        this setting.
+                                                    </p>
+                                                </div>
                                             ) : null}
                                         </div>
                                     </div>
