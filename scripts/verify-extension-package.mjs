@@ -7,6 +7,8 @@ const manifestPath = path.join(distDir, "manifest.json");
 
 const expectedPermissions = ["sidePanel", "storage"];
 const expectedHostPermissions = ["http://localhost:11434/*", "http://127.0.0.1:11434/*"];
+const expectedName = "Local AI Side Panel";
+const expectedShortName = "Local AI";
 const forbiddenPermissions = [
     "<all_urls>",
     "tabs",
@@ -53,9 +55,17 @@ if (!fs.existsSync(manifestPath)) {
 } else {
     const manifest = readJson(manifestPath);
     if (manifest.manifest_version !== 3) errors.push(fail("manifest_version must be 3"));
+    if (manifest.name !== expectedName) {
+        errors.push(fail(`manifest name must be ${JSON.stringify(expectedName)}`));
+    }
+    if (manifest.short_name !== expectedShortName) {
+        errors.push(fail(`manifest short_name must be ${JSON.stringify(expectedShortName)}`));
+    }
     if (manifest.version !== "0.1.0") errors.push(fail("manifest version must remain 0.1.0"));
-    if (!manifest.name) errors.push(fail("manifest name is missing"));
     if (!manifest.description) errors.push(fail("manifest description is missing"));
+    if (typeof manifest.description === "string" && manifest.description.length > 132) {
+        errors.push(fail("manifest description must be 132 characters or fewer"));
+    }
     if (!manifest.minimum_chrome_version) {
         errors.push(fail("minimum_chrome_version is missing"));
     }
