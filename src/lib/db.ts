@@ -25,7 +25,8 @@ function openDb(): Promise<IDBDatabase> {
                 }
             };
             req.onsuccess = () => resolve(req.result);
-            req.onerror = () => reject(new AppError("STORAGE_ERROR", "Could not open local database"));
+            req.onerror = () =>
+                reject(new AppError("STORAGE_ERROR", "Could not open local database"));
         });
     }
     return dbPromise;
@@ -51,7 +52,8 @@ function tx<T>(
                 let result: T | undefined;
                 if (request) request.onsuccess = () => (result = request.result);
                 t.oncomplete = () => resolve(result);
-                t.onerror = () => reject(new AppError("STORAGE_ERROR", "Local storage operation failed"));
+                t.onerror = () =>
+                    reject(new AppError("STORAGE_ERROR", "Local storage operation failed"));
             }),
     );
 }
@@ -64,7 +66,13 @@ export function uuid(): string {
 export const conversationRepository = {
     async createConversation(model: string, title = "New chat"): Promise<Conversation> {
         const now = new Date().toISOString();
-        const conversation: Conversation = { id: uuid(), title, model, createdAt: now, updatedAt: now };
+        const conversation: Conversation = {
+            id: uuid(),
+            title,
+            model,
+            createdAt: now,
+            updatedAt: now,
+        };
         await tx("conversations", "readwrite", (stores) => {
             const store = stores[0];
             if (!store) return;
@@ -84,9 +92,10 @@ export const conversationRepository = {
     async getMessages(conversationId: string): Promise<Message[]> {
         const all = await tx<Message[]>("messages", "readonly", (stores) => {
             const store = stores[0];
-            return store?.index("conversation_createdAt").getAll(
-                IDBKeyRange.bound([conversationId, ""], [conversationId, "\uffff"]),
-            ) as IDBRequest<Message[]> | undefined;
+            return store
+                ?.index("conversation_createdAt")
+                .getAll(IDBKeyRange.bound([conversationId, ""], [conversationId, "\uffff"])) as
+                IDBRequest<Message[]> | undefined;
         });
         return all ?? [];
     },
