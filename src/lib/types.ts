@@ -44,6 +44,7 @@ export type AppErrorCode =
     | "STREAM_PARSE_ERROR"
     | "REQUEST_ABORTED"
     | "CONTEXT_LIMIT"
+    | "INVALID_ENDPOINT"
     | "STORAGE_ERROR"
     | "UNKNOWN";
 
@@ -65,16 +66,13 @@ export const ERROR_GUIDANCE: Record<AppErrorCode, string> = {
     STREAM_PARSE_ERROR: "The response stream was malformed. Try again.",
     REQUEST_ABORTED: "Generation stopped.",
     CONTEXT_LIMIT: "Context limit reached. Start a new chat or reduce history depth.",
+    INVALID_ENDPOINT: "Only localhost and 127.0.0.1 HTTP endpoints are allowed.",
     STORAGE_ERROR: "Local storage is unavailable.",
     UNKNOWN: "Something went wrong.",
 };
 
 export type RuntimeState =
-    | "checking_runtime"
-    | "runtime_unavailable"
-    | "checking_models"
-    | "no_models"
-    | "ready";
+    "checking_runtime" | "runtime_unavailable" | "checking_models" | "no_models" | "ready";
 
 export interface Settings {
     endpoint: string;
