@@ -1,5 +1,5 @@
 {
-    "name": "gemma-local-ai-extension",
+    "name": "local-ai-side-panel-extension",
     "private": true,
     "sideEffects": false,
     "type": "module",
