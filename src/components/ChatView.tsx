@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AlertTriangle, ArrowUp, Cpu, Square } from "lucide-react";
+import { AlertTriangle, ArrowUp, Bot, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CopyButton, MessageContent } from "@/components/MessageContent";
 import { cn } from "@/lib/utils";
@@ -36,19 +36,20 @@ export function ChatView({
     return (
         <div className="flex min-h-0 flex-1 flex-col">
             <div className="min-h-0 flex-1 overflow-y-auto">
-                <div className="mx-auto w-full max-w-3xl space-y-6 px-5 py-6">
+                <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-5">
                     {messages.length === 0 ? (
-                        <div className="panel-grid mt-10 rounded-xl border border-border bg-surface/60 p-8 text-center">
-                            <Cpu className="mx-auto size-6 text-primary" />
-                            <h2 className="mt-3 text-lg font-semibold">
-                                Everything runs on your machine
+                        <div className="panel-grid mx-auto mt-10 max-w-lg rounded-2xl border border-border p-7 text-center shadow-subtle">
+                            <span className="mx-auto flex size-10 items-center justify-center rounded-xl border border-border bg-surface-secondary text-primary">
+                                <Bot className="size-5" />
+                            </span>
+                            <h2 className="mt-4 text-xl font-semibold tracking-tight">
+                                Gemma Local AI
                             </h2>
-                            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-                                Prompts go straight to your local Ollama runtime. No accounts, no
-                                API keys, no telemetry — conversations are stored only in this
-                                browser.
+                            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
+                                Your local AI, running on this computer. Ask anything to get
+                                started.
                             </p>
-                            <p className="tag-mono mt-4 text-primary">
+                            <p className="mt-4 truncate font-mono text-xs text-muted-foreground">
                                 {model ?? "no model selected"}
                             </p>
                         </div>
@@ -62,7 +63,7 @@ export function ChatView({
                                 m.role === "user" ? "items-end" : "items-start",
                             )}
                         >
-                            <div className="tag-mono flex items-center gap-2 text-muted-foreground">
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                 <span>
                                     {m.role === "user"
                                         ? "you"
@@ -78,12 +79,12 @@ export function ChatView({
 
                             <div
                                 className={cn(
-                                    "max-w-[46rem] rounded-xl border px-4 py-3",
+                                    "max-w-[min(42rem,92%)] rounded-2xl border px-4 py-3 shadow-subtle",
                                     m.role === "user"
-                                        ? "border-border bg-surface-raised"
+                                        ? "border-primary/20 bg-primary text-primary-foreground"
                                         : "border-border bg-surface",
                                     m.status === "error" &&
-                                        "border-destructive/50 bg-destructive/10",
+                                        "border-destructive/30 bg-destructive/10 text-foreground",
                                 )}
                             >
                                 {m.status === "error" ? (
@@ -131,8 +132,8 @@ export function ChatView({
                 </div>
             </div>
 
-            <div className="border-t border-border bg-surface/70 px-5 py-4 backdrop-blur">
-                <div className="mx-auto flex w-full max-w-3xl items-end gap-2 rounded-xl border border-border bg-background p-2 focus-within:shadow-glow">
+            <div className="border-t border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-5">
+                <div className="mx-auto flex w-full max-w-3xl items-end gap-2 rounded-2xl border border-border bg-background p-2 shadow-subtle transition-shadow focus-within:shadow-glow">
                     <textarea
                         rows={1}
                         value={input}
@@ -144,31 +145,31 @@ export function ChatView({
                                 submit();
                             }
                         }}
-                        placeholder={model ? "Ask your local model…" : "Select a model first"}
-                        className="max-h-40 min-h-9 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-muted-foreground"
+                        placeholder={model ? "Ask your local model..." : "Select a model first"}
+                        className="max-h-40 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
                     />
                     {busy ? (
                         <Button
                             variant="secondary"
-                            size="icon"
+                            size="default"
                             onClick={onStop}
                             aria-label="Stop generating"
                         >
-                            <Square className="size-4" />
+                            <Square className="size-4" /> Stop
                         </Button>
                     ) : (
                         <Button
                             size="icon"
                             onClick={submit}
-                            disabled={!input.trim()}
+                            disabled={!input.trim() || !model}
                             aria-label="Send message"
                         >
                             <ArrowUp className="size-4" />
                         </Button>
                     )}
                 </div>
-                <p className="tag-mono mx-auto mt-2 w-full max-w-3xl text-muted-foreground">
-                    enter to send · shift+enter for newline · local inference only
+                <p className="mx-auto mt-2 w-full max-w-3xl text-xs text-muted-foreground">
+                    Enter to send. Shift+Enter for a new line. Local inference only.
                 </p>
             </div>
         </div>
