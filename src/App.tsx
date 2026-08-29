@@ -66,7 +66,7 @@ export function App() {
                             </span>
                             <div>
                                 <h1 className="text-sm font-semibold tracking-tight">
-                                    Gemma Local AI
+                                    Local AI Side Panel
                                 </h1>
                                 <div className="text-xs text-muted-foreground">
                                     Local side panel
@@ -220,6 +220,7 @@ export function App() {
                 {view === "settings" ? (
                     <SettingsPanel
                         settings={ai.settings}
+                        runtimeState={ai.runtimeState}
                         models={ai.models}
                         onChange={ai.patchSettings}
                         onExport={() => void ai.exportAll()}
@@ -281,6 +282,7 @@ export function App() {
                         state={ai.runtimeState}
                         endpoint={ai.settings.endpoint}
                         detail={ai.runtimeDetail}
+                        errorCode={ai.runtimeErrorCode}
                         onRetry={ai.retryPreflight}
                     />
                 )}
