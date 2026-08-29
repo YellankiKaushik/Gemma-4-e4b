@@ -134,7 +134,6 @@
 }
 
 @keyframes caret-blink {
-
     0%,
     60% {
         opacity: 1;
