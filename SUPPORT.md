@@ -1,73 +1,23 @@
 # Support
 
-## Ollama Not Detected
+Start with the guide that matches the problem:
 
-- Confirm Ollama is installed and running.
-- Confirm the endpoint is `http://localhost:11434` or `http://127.0.0.1:11434`.
-- Restart Ollama, reopen the side panel, and click Retry.
+- [Installation](docs/INSTALLATION.md)
+- [Ollama setup](docs/OLLAMA_SETUP.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [FAQ](docs/FAQ.md)
+- [Privacy policy](PRIVACY_POLICY.md)
 
-## No Models Found
+## Before opening an issue
 
-- Run `ollama list`.
-- Install a compatible model.
-- Recommended: `ollama pull gemma4:e4b`.
-- Click Retry after the model is installed.
+Please include the Chrome version, operating system, Ollama version, model name, and a short reproduction sequence. Remove prompts, conversation text, API keys, machine paths, and full local logs.
 
-## Extension Origin Rejected / HTTP 403
+For a reproducible bug, use the [bug report template](https://github.com/YellankiKaushik/Gemma-4-e4b/issues/new?template=bug_report.yml). Security issues should follow [SECURITY.md](SECURITY.md) instead of being posted publicly.
 
-Ollama may reject Chrome extension origins unless they are allowed with `OLLAMA_ORIGINS`.
+## Common quick fixes
 
-Open the extension Settings or runtime setup panel and copy the exact current extension origin:
-
-```text
-chrome-extension://YOUR_CURRENT_EXTENSION_ID
-```
-
-Set `OLLAMA_ORIGINS` to that exact origin, then restart Ollama completely.
-
-Windows PowerShell example:
-
-```powershell
-[Environment]::SetEnvironmentVariable("OLLAMA_ORIGINS","chrome-extension://YOUR_CURRENT_EXTENSION_ID","User")
-```
-
-Development-only wildcard option:
-
-```text
-chrome-extension://*
-```
-
-The wildcard is less restrictive because it allows other Chrome extensions to contact Ollama.
-
-## Ollama HTTP 500
-
-HTTP 500 usually means the local Ollama/model runtime failed. Restart Ollama and check Ollama logs for model or GPU runtime errors. This is not usually caused by the Chrome extension itself.
-
-## CUDA Shared Object Initialization Error
-
-Some systems may show a local Ollama/GGML CUDA error similar to:
-
-```text
-CUDA error: shared object initialization failed
-ggml_cuda_kernel_can_use_pdl
-```
-
-Optional workaround for users who reproduce that specific error:
-
-```text
-GGML_CUDA_PDL=0
-```
-
-Do not set this unless your local Ollama runtime needs it.
-
-## Reset Extension
-
-- Rebuild with `pnpm run build` if running an unpacked development build.
-- Open `chrome://extensions`.
-- Click reload for Local AI Side Panel.
-- Clear local history from Settings if desired.
-- Reinstall the extension if Chrome reports package corruption.
-
-## Privacy
-
-See `PRIVACY_POLICY.md`.
+- If Ollama is unavailable, start it and click Retry.
+- If no model is found, run `ollama list` or `ollama pull gemma4:e4b`.
+- If Ollama returns 403, allow the exact `chrome-extension://...` origin shown by the extension in `OLLAMA_ORIGINS`, then restart Ollama completely.
+- If Ollama returns 500, inspect the local model/runtime logs rather than changing extension permissions.
+- For the specific CUDA PDL initialization failure only, see the optional `GGML_CUDA_PDL=0` guidance in [Troubleshooting](docs/TROUBLESHOOTING.md).
