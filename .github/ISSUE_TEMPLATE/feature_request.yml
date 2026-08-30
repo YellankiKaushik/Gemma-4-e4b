@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest a focused improvement for Local AI Side Panel
+title: "[Feature]: "
+labels:
+    - enhancement
+body:
+    - type: markdown
+      attributes:
+          value: |
+              This project is intentionally local-only and narrow in scope. Requests for cloud inference, broad webpage access, analytics, accounts, or remote servers are outside the current product boundary.
+    - type: textarea
+      id: problem
+      attributes:
+          label: Problem to solve
+          description: What user problem would this address?
+      validations:
+          required: true
+    - type: textarea
+      id: proposal
+      attributes:
+          label: Proposed solution
+      validations:
+          required: true
+    - type: textarea
+      id: alternatives
+      attributes:
+          label: Alternatives considered
+    - type: textarea
+      id: scope
+      attributes:
+          label: Scope and tradeoffs
+          description: Note any implications for privacy, permissions, persistence, streaming, or the Side Panel experience.
