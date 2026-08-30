@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible problem with Local AI Side Panel
+title: "[Bug]: "
+labels:
+    - bug
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Please search existing issues first. Do not include prompts, private conversations, API keys, or full local logs.
+    - type: input
+      id: version
+      attributes:
+          label: Extension version
+          placeholder: 0.1.0
+      validations:
+          required: true
+    - type: input
+      id: environment
+      attributes:
+          label: Environment
+          description: Include Chrome version, operating system, Ollama version, and model name.
+      validations:
+          required: true
+    - type: dropdown
+      id: area
+      attributes:
+          label: Area
+          options:
+              - Installation or manifest
+              - Ollama connection
+              - Model discovery or chat
+              - Streaming or Stop
+              - History or settings
+              - Theme or accessibility
+              - Packaging or documentation
+      validations:
+          required: true
+    - type: textarea
+      id: steps
+      attributes:
+          label: Steps to reproduce
+          placeholder: Tell us the smallest sequence that reproduces the issue.
+      validations:
+          required: true
+    - type: textarea
+      id: expected
+      attributes:
+          label: Expected behavior
+      validations:
+          required: true
+    - type: textarea
+      id: actual
+      attributes:
+          label: Actual behavior
+      validations:
+          required: true
+    - type: textarea
+      id: diagnostics
+      attributes:
+          label: Safe diagnostics
+          description: Include concise error codes or sanitized output only. Remove private content.
