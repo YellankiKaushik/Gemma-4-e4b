@@ -45,3 +45,5 @@ Host permissions:
 ## Notes For Submission
 
 Do not claim that prompts never leave the user's computer unless the final submitted code still enforces loopback-only endpoints. The current implementation does enforce loopback-only endpoints.
+
+Support contact: kaushikyellanki@gmail.com
