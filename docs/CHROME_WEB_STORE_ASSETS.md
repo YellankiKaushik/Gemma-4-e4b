@@ -5,6 +5,7 @@
 Store icon:
 
 - 128x128 px
+- Status: complete as `branding/exports/store-icon-128.png`, derived from the approved v0.1.0 extension icon.
 
 Screenshots:
 
@@ -57,4 +58,4 @@ Desired icon direction:
 - independent brand identity
 - works on light and dark surfaces
 
-The current placeholder icons are acceptable for development packaging, but final icon creation remains a manual asset task before Chrome Web Store submission.
+The approved v0.1.0 extension icons are integrated in `public/icons/` and mirrored in `branding/exports/`. Final real screenshots and promotional graphics remain manual tasks before Chrome Web Store submission.
