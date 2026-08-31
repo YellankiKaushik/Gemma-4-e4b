@@ -1,6 +1,6 @@
 # Branding
 
-This directory is reserved for final independent brand assets for Local AI Side Panel.
+This directory contains the approved independent v0.1.0 brand assets for Local AI Side Panel.
 
 Do not place third-party logos or copied marks here. In particular, do not use the Ollama llama, Google's Gemma branding, the Chrome logo, the Google logo, or any other third-party trademark as the product icon.
 
@@ -31,23 +31,33 @@ Recommended palette:
 
 ## Current Asset State
 
-The current `public/icons/` files are functional placeholder PNGs for extension packaging. They are intentionally small and should be replaced with final independent artwork before Chrome Web Store submission.
+The approved v0.1.0 icon artwork has been integrated. Production extension icons live in `public/icons/` and are copied into `dist/icons/` during the Vite build.
+
+Source and export files:
+
+- `branding/master/local-ai-side-panel-approved-source.png`: supplied composite approval image.
+- `branding/master/local-ai-side-panel-icon.png`: cleaned square master crop without preview labels.
+- `branding/exports/icon-16.png`: 16x16 extension icon export.
+- `branding/exports/icon-32.png`: 32x32 extension icon export.
+- `branding/exports/icon-48.png`: 48x48 extension icon export.
+- `branding/exports/icon-128.png`: 128x128 extension icon export.
+- `branding/exports/store-icon-128.png`: 128x128 store icon copy from the approved export.
 
 ## Target Structure
 
-Use this structure once final artwork exists:
+Current structure:
 
 ```text
 branding/
   master/
+    local-ai-side-panel-approved-source.png
+    local-ai-side-panel-icon.png
   exports/
     icon-16.png
     icon-32.png
     icon-48.png
     icon-128.png
     store-icon-128.png
-    promo-440x280.png
-    marquee-1400x560.png
 ```
 
-Do not create empty binary placeholders. Add only real exported image files.
+Store screenshots, the 440x280 promotional tile, and optional 1400x560 marquee remain manual store-submission asset tasks. Do not create mock screenshots or promotional graphics that show unimplemented behavior.
