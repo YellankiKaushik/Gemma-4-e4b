@@ -1,0 +1,62 @@
+# Final Release QA
+
+Final QA must be performed from the exact generated release ZIP, not only from `dist/`.
+
+## Procedure
+
+1. Run:
+
+```sh
+pnpm run package
+```
+
+2. Use:
+
+```text
+release/Local-AI-Side-Panel-0.1.0.zip
+```
+
+3. Extract it to a clean temporary folder.
+
+4. Verify the extracted root contains:
+
+```text
+manifest.json
+sidepanel.html
+service-worker.js
+assets/
+icons/
+```
+
+5. Load through Chrome:
+
+```text
+chrome://extensions
+Developer Mode
+Load unpacked
+select extracted folder
+```
+
+## Manual Checklist
+
+- [ ] Side Panel opens
+- [ ] Dark theme works
+- [ ] Light theme works
+- [ ] Auto theme works
+- [ ] Ollama connects
+- [ ] models are discovered
+- [ ] real inference works
+- [ ] streaming works
+- [ ] Stop works
+- [ ] send after Stop works
+- [ ] history persists
+- [ ] settings persist
+- [ ] extension reload persists
+- [ ] Chrome restart persists
+- [ ] 403 onboarding UI appears when applicable
+- [ ] displayed extension origin uses current `chrome.runtime.id`
+- [ ] Copy extension origin works
+- [ ] Copy Windows `OLLAMA_ORIGINS` command contains the exact current extension ID
+- [ ] Retry works after Ollama restart
+
+Do not mark these passed until they are tested from the extracted release ZIP.
