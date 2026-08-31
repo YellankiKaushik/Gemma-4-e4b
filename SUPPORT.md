@@ -1,5 +1,7 @@
 # Support
 
+For support, contact kaushikyellanki@gmail.com.
+
 Start with the guide that matches the problem:
 
 - [Installation](docs/INSTALLATION.md)
