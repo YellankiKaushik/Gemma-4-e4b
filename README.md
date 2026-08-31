@@ -86,7 +86,7 @@ For development only, Ollama also supports the broader pattern `chrome-extension
 - [Final release QA](docs/FINAL_RELEASE_QA.md): test the exact generated ZIP before submission
 - [GitHub Release](docs/GITHUB_RELEASE.md): manual GitHub Release handoff steps
 - [Chrome Web Store submission](docs/CHROME_WEB_STORE_SUBMISSION.md): manual store submission checklist
-- [Branding](docs/BRANDING.md): final icon and store-asset integration plan
+- [Branding](docs/BRANDING.md): approved v0.1.0 icon assets and remaining store-asset plan
 - [Store screenshots](docs/STORE_SCREENSHOTS.md): screenshot plan for listing assets
 - [Contributing](CONTRIBUTING.md): how to propose changes
 - [Security](SECURITY.md): vulnerability reporting and security scope
@@ -125,7 +125,7 @@ The production extension uses exactly two Chrome permissions: `sidePanel` and `s
 
 Prompts and model responses go to the user's local Ollama process. Conversations are stored in IndexedDB, and settings are stored in `chrome.storage.local`. No project-controlled cloud backend, account system, analytics, advertising SDK, or remote inference provider is part of the runtime.
 
-Read the [privacy policy](PRIVACY_POLICY.md) before distributing a build, and replace its support-email placeholder before publishing.
+Read the [privacy policy](PRIVACY_POLICY.md) before distributing a build. The public support contact is kaushikyellanki@gmail.com.
 
 ## Troubleshooting at a glance
 
