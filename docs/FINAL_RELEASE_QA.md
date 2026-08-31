@@ -39,24 +39,31 @@ select extracted folder
 
 ## Manual Checklist
 
-- [ ] Side Panel opens
-- [ ] Dark theme works
-- [ ] Light theme works
-- [ ] Auto theme works
-- [ ] Ollama connects
-- [ ] models are discovered
-- [ ] real inference works
-- [ ] streaming works
-- [ ] Stop works
-- [ ] send after Stop works
-- [ ] history persists
-- [ ] settings persist
-- [ ] extension reload persists
-- [ ] Chrome restart persists
-- [ ] 403 onboarding UI appears when applicable
-- [ ] displayed extension origin uses current `chrome.runtime.id`
-- [ ] Copy extension origin works
-- [ ] Copy Windows `OLLAMA_ORIGINS` command contains the exact current extension ID
-- [ ] Retry works after Ollama restart
+```text
+Side Panel               PASS / FAIL
+Dark                     PASS / FAIL
+Light                    PASS / FAIL
+Auto                     PASS / FAIL
+Ollama connection        PASS / FAIL
+Model discovery          PASS / FAIL
+Real inference           PASS / FAIL
+Streaming                PASS / FAIL
+Stop                     PASS / FAIL
+History persistence      PASS / FAIL
+Settings persistence     PASS / FAIL
+403 origin setup         PASS / FAIL
+Copy OLLAMA_ORIGINS      PASS / FAIL
+New icon renders properly PASS / FAIL
+```
+
+Also verify:
+
+- send after Stop works
+- extension reload persistence
+- Chrome restart persistence
+- displayed extension origin uses current `chrome.runtime.id`
+- Copy extension origin works
+- Copy Windows `OLLAMA_ORIGINS` command contains the exact current extension ID
+- Retry works after Ollama restart
 
 Do not mark these passed until they are tested from the extracted release ZIP.
