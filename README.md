@@ -83,6 +83,11 @@ For development only, Ollama also supports the broader pattern `chrome-extension
 - [Architecture](docs/ARCHITECTURE.md): extension boundaries and data flow
 - [Development](docs/DEVELOPMENT.md): local workflow, tests, and debugging
 - [Releasing](docs/RELEASING.md): release candidate and package workflow
+- [Final release QA](docs/FINAL_RELEASE_QA.md): test the exact generated ZIP before submission
+- [GitHub Release](docs/GITHUB_RELEASE.md): manual GitHub Release handoff steps
+- [Chrome Web Store submission](docs/CHROME_WEB_STORE_SUBMISSION.md): manual store submission checklist
+- [Branding](docs/BRANDING.md): final icon and store-asset integration plan
+- [Store screenshots](docs/STORE_SCREENSHOTS.md): screenshot plan for listing assets
 - [Contributing](CONTRIBUTING.md): how to propose changes
 - [Security](SECURITY.md): vulnerability reporting and security scope
 - [Privacy policy](PRIVACY_POLICY.md): data handling statement
@@ -104,6 +109,12 @@ pnpm run package
 `pnpm run package` rebuilds the extension, verifies the production manifest, and creates a ZIP with the extension files at its root. It does not publish anything.
 
 The development server is useful for ordinary browser/component work, but Chrome extension verification should use the built `dist/` directory. See [Development](docs/DEVELOPMENT.md) for the distinction.
+
+## Releases
+
+Release packages are generated locally with `pnpm run package`. The first public GitHub Release will publish `Local-AI-Side-Panel-0.1.0.zip`.
+
+Do not create or force-update the `v0.1.0` tag without checking existing tags first. See [Git release tagging](docs/GIT_RELEASE_TAGGING.md) and [GitHub Release](docs/GITHUB_RELEASE.md).
 
 ## Privacy and permissions
 
