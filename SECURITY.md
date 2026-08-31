@@ -10,14 +10,14 @@ The current release candidate is v0.1.0. Security fixes should target the curren
 
 ## Reporting a vulnerability
 
-Please do not disclose an unpatched vulnerability in a public issue. Contact the maintainer at `<SECURITY_CONTACT_EMAIL>` with:
+Please do not disclose an unpatched vulnerability in a public issue. Contact the maintainer at kaushikyellanki@gmail.com with:
 
 - a short description of the issue;
 - affected version or commit;
 - reproducible steps or a minimal proof of concept;
 - impact and any suggested mitigation.
 
-Replace the contact placeholder before public release. Do not include prompts, conversation history, API keys, or unrelated private information.
+Do not include prompts, conversation history, API keys, or unrelated private information.
 
 ## Security design notes
 
