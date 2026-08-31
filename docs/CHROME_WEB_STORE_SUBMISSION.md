@@ -39,3 +39,5 @@ Local-AI-Side-Panel-0.1.0.zip
 - [Support](../SUPPORT.md)
 
 Do not invent a Web Store URL before the item exists.
+
+Support email for the draft listing: kaushikyellanki@gmail.com
