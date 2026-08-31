@@ -1,37 +1,37 @@
 # Final Release Tasks
 
-## 1. Replace contact placeholders
+## 1. Contact information finalized
 
-- [ ] support email
-- [ ] security email
+- [x] support email
+- [x] security email
 
-Replace:
+Final contacts:
 
-- `<YOUR_SUPPORT_EMAIL>`
-- `<SECURITY_CONTACT_EMAIL>`
+- support: kaushikyellanki@gmail.com
+- security: kaushikyellanki@gmail.com
 
-Recommended use:
+Verified active locations:
 
 - support contact in `PRIVACY_POLICY.md`, `SUPPORT.md`, and Chrome Web Store support fields
 - security contact in `SECURITY.md`
 
 ## 2. Final branding
 
-- [ ] master logo/icon
-- [ ] icon 16
-- [ ] icon 32
-- [ ] icon 48
-- [ ] icon 128
-- [ ] store icon
+- [x] master logo/icon
+- [x] icon 16
+- [x] icon 32
+- [x] icon 48
+- [x] icon 128
+- [x] store icon
 - [ ] promo tile
 - [ ] optional marquee
 
 ## 3. Replace extension icon assets
 
-- [ ] replace public/icons files
-- [ ] rebuild
-- [ ] verify
-- [ ] package
+- [x] replace public/icons files
+- [x] rebuild
+- [x] verify
+- [x] package
 
 ## 4. Capture store screenshots
 
@@ -44,6 +44,7 @@ Recommended use:
 - [ ] extract release ZIP
 - [ ] load unpacked
 - [ ] full release-critical QA
+- [ ] new icon renders correctly in Chrome
 
 ## 6. Git tag
 
