@@ -60,6 +60,4 @@ This policy may be updated as the extension changes. Material changes should be 
 
 ## Contact
 
-`<YOUR_SUPPORT_EMAIL>`
-
-Replace this placeholder before submission.
+kaushikyellanki@gmail.com
