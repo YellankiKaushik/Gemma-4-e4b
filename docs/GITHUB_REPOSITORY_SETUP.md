@@ -17,8 +17,11 @@ Attach `release/Local-AI-Side-Panel-0.1.0.zip` to a GitHub Release only after th
 
 ## Project metadata to replace before publication
 
-- `<YOUR_SUPPORT_EMAIL>` in `PRIVACY_POLICY.md`
-- final independent icon and store screenshots
-- any maintainer-specific support or security contact details
+- store screenshots
+- promotional tile
+- final Web Store support and privacy URLs
+- any repository metadata updates if the project moves
+
+The public support and security contact is kaushikyellanki@gmail.com.
 
 The repository currently has a verified remote at `https://github.com/YellankiKaushik/Gemma-4-e4b`. Keep links updated if the repository is moved.
