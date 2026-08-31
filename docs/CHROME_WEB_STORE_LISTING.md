@@ -43,6 +43,10 @@ Privacy:
 - inference sent only to localhost / 127.0.0.1
 - no project cloud backend
 
+Support:
+
+- kaushikyellanki@gmail.com
+
 Important:
 
 - Local AI Side Panel is an independent project.
