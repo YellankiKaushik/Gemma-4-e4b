@@ -1,6 +1,6 @@
 # Branding
 
-Local AI Side Panel needs independent release artwork before final Chrome Web Store submission.
+Local AI Side Panel now has approved independent v0.1.0 extension icon artwork integrated.
 
 ## Required Extension Icons
 
@@ -36,11 +36,18 @@ Do not change the manifest paths unless the package verifier is updated at the s
 
 ## Current Icon State
 
-The current `public/icons/` files are functional placeholder PNGs. They are suitable for local package verification, but final independent artwork is still required before store submission.
+The current `public/icons/` files are the approved v0.1.0 icon exports:
+
+- `public/icons/icon-16.png`
+- `public/icons/icon-32.png`
+- `public/icons/icon-48.png`
+- `public/icons/icon-128.png`
+
+The cleaned master and matching exports are preserved under `branding/`.
 
 ## Integration Workflow
 
-Once final artwork exists:
+When refreshing or replacing approved artwork:
 
 1. Export icon PNGs.
 2. Replace the files in `public/icons/`.
@@ -61,3 +68,11 @@ Do not use:
 - copied third-party marks
 
 Use a simple geometric/local-network motif that remains legible at small sizes.
+
+## Remaining Store Assets
+
+The extension icon is complete for v0.1.0. These store-listing assets remain manual tasks:
+
+- three real 1280x800 screenshots
+- 440x280 promotional tile
+- optional 1400x560 marquee
