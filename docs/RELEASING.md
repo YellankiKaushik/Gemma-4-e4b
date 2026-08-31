@@ -35,9 +35,9 @@ The existing [release checklist](RELEASE_CHECKLIST.md) is the source for the man
 
 Before submission:
 
-- replace `<YOUR_SUPPORT_EMAIL>` in the privacy policy;
+- verify the finalized support and security contact details;
 - create final screenshots showing actual features;
-- replace placeholder icon artwork with independent branding if desired;
+- create or verify the 440x280 promotional tile;
 - review the privacy declaration against the exact submitted build;
 - confirm the final Web Store extension ID and update the recommended scoped Ollama origin guidance if needed.
 
