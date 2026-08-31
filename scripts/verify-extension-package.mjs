@@ -9,6 +9,12 @@ const expectedPermissions = ["sidePanel", "storage"];
 const expectedHostPermissions = ["http://localhost:11434/*", "http://127.0.0.1:11434/*"];
 const expectedName = "Local AI Side Panel";
 const expectedShortName = "Local AI";
+const expectedIconDimensions = new Map([
+    ["icons/icon-16.png", 16],
+    ["icons/icon-32.png", 32],
+    ["icons/icon-48.png", 48],
+    ["icons/icon-128.png", 128],
+]);
 const forbiddenPermissions = [
     "<all_urls>",
     "tabs",
@@ -37,6 +43,17 @@ function sameMembers(actual = [], expected = []) {
 
 function existsInDist(relativePath) {
     return fs.existsSync(path.join(distDir, relativePath));
+}
+
+function readPngDimensions(filePath) {
+    const png = fs.readFileSync(filePath);
+    const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    if (png.length < 24 || !png.subarray(0, 8).equals(signature)) {
+        throw new Error("not a PNG file");
+    }
+    const width = png.readUInt32BE(16);
+    const height = png.readUInt32BE(20);
+    return { width, height };
 }
 
 function collectManifestPaths(manifest) {
@@ -105,6 +122,22 @@ if (!fs.existsSync(manifestPath)) {
     for (const relativePath of collectManifestPaths(manifest)) {
         if (!existsInDist(relativePath)) {
             errors.push(fail(`manifest references missing file: ${relativePath}`));
+            continue;
+        }
+        const expectedSize = expectedIconDimensions.get(relativePath);
+        if (expectedSize) {
+            try {
+                const dimensions = readPngDimensions(path.join(distDir, relativePath));
+                if (dimensions.width !== expectedSize || dimensions.height !== expectedSize) {
+                    errors.push(
+                        fail(
+                            `${relativePath} must be ${expectedSize}x${expectedSize}, got ${dimensions.width}x${dimensions.height}`,
+                        ),
+                    );
+                }
+            } catch (error) {
+                errors.push(fail(`${relativePath} is not a valid PNG: ${error.message}`));
+            }
         }
     }
 }
