@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Local AI Side Panel",
     "short_name": "Local AI",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Chat with local Ollama models from Chrome's side panel. Private, streaming, and fully local.",
     "minimum_chrome_version": "116",
     "permissions": ["sidePanel", "storage"],
