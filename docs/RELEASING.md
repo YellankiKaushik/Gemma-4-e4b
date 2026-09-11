@@ -20,7 +20,7 @@ pnpm run package
 Inspect the ZIP:
 
 ```text
-release/Local-AI-Side-Panel-0.1.0.zip
+release/Local-AI-Side-Panel-0.1.1.zip
 ```
 
 Its root must contain `manifest.json`, `sidepanel.html`, `service-worker.js`, `assets/`, and `icons/`. It must not contain a nested `dist/`, source files, `node_modules/`, or `.git/`.
