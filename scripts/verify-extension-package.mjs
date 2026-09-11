@@ -78,7 +78,7 @@ if (!fs.existsSync(manifestPath)) {
     if (manifest.short_name !== expectedShortName) {
         errors.push(fail(`manifest short_name must be ${JSON.stringify(expectedShortName)}`));
     }
-    if (manifest.version !== "0.1.0") errors.push(fail("manifest version must remain 0.1.0"));
+    if (manifest.version !== "0.1.1") errors.push(fail("manifest version must remain 0.1.1"));
     if (!manifest.description) errors.push(fail("manifest description is missing"));
     if (typeof manifest.description === "string" && manifest.description.length > 132) {
         errors.push(fail("manifest description must be 132 characters or fewer"));
