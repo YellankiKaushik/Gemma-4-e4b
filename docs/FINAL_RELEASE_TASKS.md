@@ -49,7 +49,7 @@ Verified active locations:
 ## 6. Git tag
 
 - [ ] inspect current tags
-- [ ] create v0.1.0 only if absent
+- [ ] create v0.1.1 only if absent
 
 ## 7. GitHub Release
 
