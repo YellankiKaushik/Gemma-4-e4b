@@ -2,31 +2,34 @@
 
 Tags are created manually by the maintainer. Do not create or force-update tags automatically.
 
-Current observed state during final release preparation:
+The existing published `v0.1.0` release must remain untouched. Prepare `v0.1.1` as a new patch release tag only after final QA and review pass.
 
-```text
-local tag v0.1.0: absent
-remote tag v0.1.0: absent
-remote tag v0.1.0-rc2: present
-```
+## Before Creating `v0.1.1`
 
-## If `v0.1.0` Does Not Exist
-
-Create an annotated tag:
+Inspect local and remote tags:
 
 ```sh
-git tag -a v0.1.0 -m "Local AI Side Panel v0.1.0"
-git push origin v0.1.0
+git tag --list "v0.1.1"
+git ls-remote --tags origin "v0.1.1"
 ```
 
-## If `v0.1.0` Already Exists
+## If `v0.1.1` Does Not Exist
+
+Create an annotated tag from the reviewed release commit:
+
+```sh
+git tag -a v0.1.1 -m "Local AI Side Panel v0.1.1"
+git push origin v0.1.1
+```
+
+## If `v0.1.1` Already Exists
 
 STOP. Do not recreate, delete, or force-update it.
 
 Inspect it first:
 
 ```sh
-git show v0.1.0
+git show v0.1.1
 ```
 
 If the tag points to the wrong commit, decide on a release correction process explicitly rather than rewriting published history.
