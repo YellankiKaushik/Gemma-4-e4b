@@ -1,10 +1,10 @@
-import { AlertTriangle, Loader2, PackageOpen, RefreshCw } from "lucide-react";
+import { AlertTriangle, Loader2, PackageOpen, RefreshCw, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/MessageContent";
 import { getExtensionOrigin, getWindowsOllamaOriginsCommand } from "@/lib/extension-origin";
 import type { AppErrorCode, RuntimeState } from "@/lib/types";
 
-// CMP-ONB-001 — preflight / onboarding surface (§8.8, FR-017).
+// CMP-ONB-001 - preflight / onboarding surface.
 export function RuntimePanel({
     state,
     endpoint,
@@ -20,10 +20,12 @@ export function RuntimePanel({
 }) {
     if (state === "checking_runtime" || state === "checking_models") {
         return (
-            <div className="flex flex-1 flex-col items-center justify-center gap-3 text-muted-foreground">
-                <Loader2 className="size-5 animate-spin text-primary" />
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-background text-muted-foreground">
+                <span className="flex size-12 items-center justify-center rounded-full bg-surface-secondary">
+                    <Loader2 className="size-5 animate-spin text-primary" />
+                </span>
                 <p className="text-sm">
-                    {state === "checking_runtime" ? "checking local runtime" : "discovering models"}
+                    {state === "checking_runtime" ? "Checking local runtime" : "Discovering models"}
                 </p>
             </div>
         );
@@ -35,58 +37,60 @@ export function RuntimePanel({
     const windowsCommand = getWindowsOllamaOriginsCommand(extensionOrigin);
 
     return (
-        <div className="flex flex-1 items-center justify-center p-5 sm:p-6">
-            <div className="w-full max-w-xl rounded-2xl border border-border bg-surface p-6 shadow-panel">
-                <div className="flex items-center gap-3">
-                    <span className="flex size-10 items-center justify-center rounded-xl border border-border bg-surface-secondary text-warning">
-                        {unreachable ? (
-                            <AlertTriangle className="size-4" />
+        <div className="flex flex-1 items-center justify-center bg-background p-5 sm:p-6">
+            <div className="w-full max-w-xl rounded-[1.75rem] bg-surface p-6 shadow-panel ring-1 ring-border sm:p-7">
+                <div className="flex items-start gap-4">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-surface-secondary text-warning ring-1 ring-border">
+                        {originRejected ? (
+                            <ShieldAlert className="size-5" />
+                        ) : unreachable ? (
+                            <AlertTriangle className="size-5" />
                         ) : (
-                            <PackageOpen className="size-4" />
+                            <PackageOpen className="size-5" />
                         )}
                     </span>
-                    <div>
-                        <h2 className="text-lg font-semibold tracking-tight">
+                    <div className="min-w-0">
+                        <h2 className="text-xl font-semibold leading-7">
                             {originRejected
                                 ? "Ollama needs permission"
                                 : unreachable
-                                  ? "Ollama isn't running"
+                                  ? "Ollama is unavailable"
                                   : "No models installed"}
                         </h2>
-                        <p className="mt-1 text-sm text-muted-foreground">
+                        <p className="mt-1 text-sm leading-6 text-muted-foreground">
                             {originRejected
-                                ? "Allow this extension origin, then restart Ollama."
+                                ? "Allow this extension origin, restart Ollama, then try again."
                                 : unreachable
-                                  ? "Start Ollama on this computer, then try again."
-                                  : "Pull a local model to begin chatting."}
+                                  ? "Start Ollama on this computer, then re-run preflight."
+                                  : "Pull a local model before starting a conversation."}
                         </p>
                     </div>
                 </div>
 
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-5 text-sm leading-7 text-muted-foreground">
                     {originRejected ? (
                         <>
                             This extension is installed as{" "}
                             <span className="font-mono text-foreground">{extensionOrigin}</span>.
-                            Add that origin to <span className="font-mono">OLLAMA_ORIGINS</span>,
-                            restart Ollama completely, then retry.
+                            Add it to <span className="font-mono">OLLAMA_ORIGINS</span>, restart
+                            Ollama completely, then retry.
                         </>
                     ) : unreachable ? (
                         <>
-                            This app talks directly to Ollama at{" "}
+                            Local AI Side Panel talks directly to{" "}
                             <span className="font-mono text-foreground">{endpoint}</span>. Nothing
-                            leaves your machine. Start the runtime and allow this browser origin.
+                            leaves your machine.
                         </>
                     ) : (
                         <>
-                            Ollama is running but no models are installed. Pull a Gemma model to get
-                            started. Models are never downloaded automatically.
+                            Ollama is running, but there are no installed models. Models are never
+                            downloaded automatically.
                         </>
                     )}
                 </p>
 
                 {originRejected ? (
-                    <div className="mt-4 space-y-3 rounded-xl border border-border bg-surface-secondary p-3">
+                    <div className="mt-5 space-y-3 rounded-2xl bg-surface-secondary p-4 ring-1 ring-border">
                         <div>
                             <p className="text-xs font-medium text-muted-foreground">
                                 Extension origin
@@ -96,20 +100,20 @@ export function RuntimePanel({
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            <CopyButton value={extensionOrigin} label="Copy extension origin" />
+                            <CopyButton value={extensionOrigin} label="Copy origin" />
                             <CopyButton value={windowsCommand} label="Copy Windows command" />
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs leading-5 text-muted-foreground">
                             Restart Ollama completely after changing this setting.
                         </p>
                     </div>
                 ) : null}
 
-                <div className="mt-4 overflow-hidden rounded-xl border border-border bg-surface-secondary">
-                    <div className="border-b border-border px-3 py-2">
+                <div className="mt-5 overflow-hidden rounded-2xl bg-surface-secondary ring-1 ring-border">
+                    <div className="border-b border-border px-4 py-2.5">
                         <span className="text-xs font-medium text-muted-foreground">Setup</span>
                     </div>
-                    <pre className="overflow-x-auto p-3 font-mono text-xs leading-relaxed text-foreground">
+                    <pre className="overflow-x-auto p-4 font-mono text-xs leading-6 text-foreground">
                         <code>
                             {unreachable
                                 ? `# 1. start the runtime\nollama serve\n\n# 2. if Chrome blocks the extension origin, restart Ollama with:\nOLLAMA_ORIGINS="${extensionOrigin}" ollama serve`
@@ -119,12 +123,12 @@ export function RuntimePanel({
                 </div>
 
                 {detail ? (
-                    <p className="mt-3 rounded-lg bg-surface-secondary p-3 font-mono text-xs text-muted-foreground break-words">
+                    <p className="mt-4 rounded-2xl bg-surface-secondary p-4 font-mono text-xs leading-5 text-muted-foreground break-words">
                         {detail}
                     </p>
                 ) : null}
 
-                <Button className="mt-5" onClick={onRetry}>
+                <Button className="mt-6" onClick={onRetry}>
                     <RefreshCw className="size-4" /> Re-run preflight
                 </Button>
             </div>
