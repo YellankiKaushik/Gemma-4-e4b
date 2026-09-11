@@ -2,7 +2,7 @@
 
 Local AI Side Panel is a Chrome Manifest V3 extension for chatting with AI models that are already installed in Ollama on your computer. It opens in Chrome's Side Panel, discovers local models, streams responses, and keeps conversations on this device.
 
-**Status:** v0.1.0 release candidate
+**Status:** v0.1.1 release candidate
 **Recommended model:** `gemma4:e4b`
 **License:** [Apache License 2.0](LICENSE)
 
@@ -112,9 +112,9 @@ The development server is useful for ordinary browser/component work, but Chrome
 
 ## Releases
 
-Release packages are generated locally with `pnpm run package`. The first public GitHub Release will publish `Local-AI-Side-Panel-0.1.0.zip`.
+Release packages are generated locally with `pnpm run package`. The v0.1.1 release candidate package is `Local-AI-Side-Panel-0.1.1.zip`.
 
-Do not create or force-update the `v0.1.0` tag without checking existing tags first. See [Git release tagging](docs/GIT_RELEASE_TAGGING.md) and [GitHub Release](docs/GITHUB_RELEASE.md).
+Do not create or force-update the `v0.1.1` tag without checking existing tags first. See [Git release tagging](docs/GIT_RELEASE_TAGGING.md) and [GitHub Release](docs/GITHUB_RELEASE.md).
 
 ## Privacy and permissions
 
