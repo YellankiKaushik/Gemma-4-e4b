@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AlertTriangle, ArrowUp, Bot, Square } from "lucide-react";
+import { AlertTriangle, ArrowUp, CircleStop, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CopyButton, MessageContent } from "@/components/MessageContent";
 import { getExtensionOrigin, getWindowsOllamaOriginsCommand } from "@/lib/extension-origin";
@@ -37,24 +37,30 @@ export function ChatView({
     };
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col bg-background">
             <div className="min-h-0 flex-1 overflow-y-auto">
-                <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-5">
+                <div className="mx-auto w-full max-w-3xl space-y-7 px-4 py-7 sm:px-6">
                     {messages.length === 0 ? (
-                        <div className="panel-grid mx-auto mt-10 max-w-lg rounded-2xl border border-border p-7 text-center shadow-subtle">
-                            <span className="mx-auto flex size-10 items-center justify-center rounded-xl border border-border bg-surface-secondary text-primary">
-                                <Bot className="size-5" />
+                        <div className="mx-auto flex min-h-[52svh] max-w-lg flex-col items-center justify-center px-2 text-center">
+                            <span className="flex size-16 items-center justify-center rounded-[1.375rem] bg-surface-secondary shadow-subtle ring-1 ring-border">
+                                <img
+                                    src="/icons/icon-48.png"
+                                    alt=""
+                                    className="size-10 rounded-xl"
+                                />
                             </span>
-                            <h2 className="mt-4 text-xl font-semibold tracking-tight">
+                            <h2 className="mt-6 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                                 Local AI Side Panel
                             </h2>
-                            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-                                Your local AI, running on this computer. Ask anything to get
-                                started.
+                            <p className="mx-auto mt-3 max-w-sm text-base leading-7 text-muted-foreground">
+                                Your local AI, right beside the browser.
                             </p>
-                            <p className="mt-4 truncate font-mono text-xs text-muted-foreground">
-                                {model ?? "no model selected"}
-                            </p>
+                            <div className="mt-7 flex max-w-full items-center gap-2 rounded-full bg-surface-secondary px-3 py-2 text-xs text-muted-foreground">
+                                <Sparkles className="size-3.5 text-primary" />
+                                <span className="truncate font-mono">
+                                    {model ?? "Select a model to begin"}
+                                </span>
+                            </div>
                         </div>
                     ) : null}
 
@@ -62,50 +68,56 @@ export function ChatView({
                         <article
                             key={m.id}
                             className={cn(
-                                "group flex flex-col gap-2",
+                                "group flex flex-col gap-2.5",
                                 m.role === "user" ? "items-end" : "items-start",
                             )}
                         >
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <div className="flex items-center gap-2 px-1 text-xs text-muted-foreground">
                                 <span>
                                     {m.role === "user"
-                                        ? "you"
-                                        : (m.generation?.model ?? "assistant")}
+                                        ? "You"
+                                        : (m.generation?.model ?? "Assistant")}
                                 </span>
                                 {m.status === "stopped" ? (
-                                    <span className="text-warning">stopped</span>
+                                    <span className="rounded-full bg-secondary px-2 py-0.5 text-warning">
+                                        Stopped
+                                    </span>
                                 ) : null}
                                 {m.status === "error" ? (
-                                    <span className="text-destructive">{m.errorCode}</span>
+                                    <span className="rounded-full bg-secondary px-2 py-0.5 text-destructive">
+                                        {m.errorCode}
+                                    </span>
                                 ) : null}
                             </div>
 
                             <div
                                 className={cn(
-                                    "max-w-[min(42rem,92%)] rounded-2xl border px-4 py-3 shadow-subtle",
+                                    "max-w-[min(46rem,92%)] rounded-[1.375rem] px-4 py-3.5 text-[0.9375rem] shadow-subtle sm:px-5",
                                     m.role === "user"
-                                        ? "border-primary/20 bg-primary text-primary-foreground"
-                                        : "border-border bg-surface",
+                                        ? "max-w-[min(36rem,78%)] bg-primary text-primary-foreground"
+                                        : "bg-surface-secondary text-foreground",
                                     m.status === "error" &&
-                                        "border-destructive/30 bg-destructive/10 text-foreground",
+                                        "border border-destructive/30 bg-surface text-foreground",
                                 )}
                             >
                                 {m.status === "error" ? (
-                                    <div className="flex gap-2 text-sm">
-                                        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
-                                        <div>
-                                            <p>
+                                    <div className="flex gap-3 text-sm leading-6">
+                                        <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-destructive">
+                                            <AlertTriangle className="size-4" />
+                                        </span>
+                                        <div className="min-w-0">
+                                            <p className="font-medium">
                                                 {m.errorCode
                                                     ? ERROR_GUIDANCE[m.errorCode]
                                                     : "Request failed."}
                                             </p>
                                             {m.content ? (
-                                                <p className="mt-1 font-mono text-xs text-muted-foreground break-words">
+                                                <p className="mt-2 break-words font-mono text-xs leading-5 text-muted-foreground">
                                                     {m.content}
                                                 </p>
                                             ) : null}
                                             {m.errorCode === "OLLAMA_ORIGIN_REJECTED" ? (
-                                                <div className="mt-3 space-y-3 rounded-xl border border-border bg-surface-secondary p-3">
+                                                <div className="mt-4 space-y-3 rounded-2xl bg-surface-secondary p-3 ring-1 ring-border">
                                                     <div>
                                                         <p className="text-xs font-medium text-muted-foreground">
                                                             Extension origin
@@ -117,14 +129,14 @@ export function ChatView({
                                                     <div className="flex flex-wrap gap-2">
                                                         <CopyButton
                                                             value={extensionOrigin}
-                                                            label="Copy extension origin"
+                                                            label="Copy origin"
                                                         />
                                                         <CopyButton
                                                             value={windowsCommand}
                                                             label="Copy Windows command"
                                                         />
                                                     </div>
-                                                    <p className="text-xs text-muted-foreground">
+                                                    <p className="text-xs leading-5 text-muted-foreground">
                                                         Restart Ollama completely after changing
                                                         this setting.
                                                     </p>
@@ -143,13 +155,13 @@ export function ChatView({
                             </div>
 
                             {m.role === "assistant" && m.status !== "streaming" && m.content ? (
-                                <div className="flex items-center gap-3 opacity-0 transition-opacity group-hover:opacity-100">
+                                <div className="flex items-center gap-3 px-1 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
                                     <CopyButton value={m.content} />
                                     {m.generation?.evalCount ? (
                                         <span className="tag-mono text-muted-foreground">
                                             {m.generation.evalCount} tok
                                             {m.generation.totalDurationMs
-                                                ? ` · ${(m.generation.totalDurationMs / 1000).toFixed(1)}s`
+                                                ? ` / ${(m.generation.totalDurationMs / 1000).toFixed(1)}s`
                                                 : ""}
                                         </span>
                                     ) : null}
@@ -161,8 +173,8 @@ export function ChatView({
                 </div>
             </div>
 
-            <div className="border-t border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-5">
-                <div className="mx-auto flex w-full max-w-3xl items-end gap-2 rounded-2xl border border-border bg-background p-2 shadow-subtle transition-shadow focus-within:shadow-glow">
+            <div className="border-t border-border bg-surface/90 px-4 py-4 backdrop-blur sm:px-5">
+                <div className="mx-auto flex w-full max-w-3xl items-end gap-2 rounded-[1.375rem] bg-background p-2 shadow-subtle ring-1 ring-input transition-shadow duration-150 focus-within:shadow-glow focus-within:ring-ring">
                     <textarea
                         rows={1}
                         value={input}
@@ -175,7 +187,7 @@ export function ChatView({
                             }
                         }}
                         placeholder={model ? "Ask your local model..." : "Select a model first"}
-                        className="max-h-40 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
+                        className="max-h-40 min-h-11 flex-1 resize-none bg-transparent px-3 py-2.5 text-[0.9375rem] leading-6 text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
                     />
                     {busy ? (
                         <Button
@@ -184,7 +196,7 @@ export function ChatView({
                             onClick={onStop}
                             aria-label="Stop generating"
                         >
-                            <Square className="size-4" /> Stop
+                            <CircleStop className="size-4" /> Stop
                         </Button>
                     ) : (
                         <Button
@@ -192,12 +204,13 @@ export function ChatView({
                             onClick={submit}
                             disabled={!input.trim() || !model}
                             aria-label="Send message"
+                            title="Send message"
                         >
                             <ArrowUp className="size-4" />
                         </Button>
                     )}
                 </div>
-                <p className="mx-auto mt-2 w-full max-w-3xl text-xs text-muted-foreground">
+                <p className="mx-auto mt-2.5 w-full max-w-3xl text-xs text-muted-foreground">
                     Enter to send. Shift+Enter for a new line. Local inference only.
                 </p>
             </div>
