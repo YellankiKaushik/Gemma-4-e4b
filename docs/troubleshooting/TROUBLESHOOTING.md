@@ -64,4 +64,4 @@ Reload the extension from `chrome://extensions`. Do not clear site data unless y
 
 Record the operating system, Chrome version, Ollama version, model name, exact UI error, and the command used. Do not include prompts, private conversations, or full logs in a public issue.
 
-Open a [bug report](https://github.com/YellankiKaushik/Gemma-4-e4b/issues/new?template=bug_report.yml) after checking the [FAQ](FAQ.md) and [Ollama setup guide](OLLAMA_SETUP.md).
+Open a [bug report](https://github.com/YellankiKaushik/Gemma-4-e4b/issues/new?template=bug_report.yml) after checking the [FAQ](../guides/FAQ.md), [Ollama setup guide](../getting-started/OLLAMA_SETUP.md), and [Ollama connection troubleshooting](OLLAMA_CONNECTION.md).
