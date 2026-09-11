@@ -13,7 +13,7 @@ pnpm run package
 2. Use:
 
 ```text
-release/Local-AI-Side-Panel-0.1.0.zip
+release/Local-AI-Side-Panel-0.1.1.zip
 ```
 
 3. Extract it to a clean temporary folder.
