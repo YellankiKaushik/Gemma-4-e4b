@@ -50,7 +50,7 @@ To build the verified package:
 pnpm run package
 ```
 
-The output is `release/Local-AI-Side-Panel-0.1.0.zip`. Its root contains `manifest.json`, `sidepanel.html`, `service-worker.js`, `assets/`, and `icons/`.
+The output is `release/Local-AI-Side-Panel-0.1.1.zip`. Its root contains `manifest.json`, `sidepanel.html`, `service-worker.js`, `assets/`, and `icons/`.
 
 ## Web Store status
 
