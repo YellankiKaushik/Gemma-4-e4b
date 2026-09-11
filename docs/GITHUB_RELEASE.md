@@ -10,25 +10,25 @@ Create the GitHub Release manually after final QA passes.
 4. Use this tag:
 
 ```text
-v0.1.0
+v0.1.1
 ```
 
 5. Use this title:
 
 ```text
-Local AI Side Panel v0.1.0
+Local AI Side Panel v0.1.1
 ```
 
 6. Attach this file:
 
 ```text
-release/Local-AI-Side-Panel-0.1.0.zip
+release/Local-AI-Side-Panel-0.1.1.zip
 ```
 
 7. Use this release body:
 
 ```text
-GITHUB_RELEASE_v0.1.0.md
+GITHUB_RELEASE_v0.1.1.md
 ```
 
 8. Mark as the latest release if appropriate.
