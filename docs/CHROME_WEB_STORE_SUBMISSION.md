@@ -10,7 +10,7 @@ Do not publish automatically. The Chrome Web Store submission is a manual mainta
 4. Upload:
 
 ```text
-Local-AI-Side-Panel-0.1.0.zip
+Local-AI-Side-Panel-0.1.1.zip
 ```
 
 5. Complete the Store Listing.
