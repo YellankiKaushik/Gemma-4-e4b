@@ -28,7 +28,7 @@ release/Local-AI-Side-Panel-0.1.1.zip
 7. Use this release body:
 
 ```text
-GITHUB_RELEASE_v0.1.1.md
+docs/releases/v0.1.1/GITHUB_RELEASE.md
 ```
 
 8. Mark as the latest release if appropriate.
