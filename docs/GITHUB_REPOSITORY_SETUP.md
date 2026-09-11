@@ -13,7 +13,7 @@ This repository is intended to be understandable and buildable from a fresh clon
 
 ## Release assets
 
-Attach `release/Local-AI-Side-Panel-0.1.0.zip` to a GitHub Release only after the release checklist is complete. Do not attach `dist/` as the user-facing package.
+Attach `release/Local-AI-Side-Panel-0.1.1.zip` to a GitHub Release only after the release checklist is complete. Do not attach `dist/` as the user-facing package.
 
 ## Project metadata to replace before publication
 
