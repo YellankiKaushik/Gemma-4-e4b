@@ -6,8 +6,8 @@ Thank you for helping improve Local AI Side Panel.
 
 Read:
 
-- [Development](docs/DEVELOPMENT.md)
-- [Architecture](docs/ARCHITECTURE.md)
+- [Development](docs/development/DEVELOPMENT.md)
+- [Architecture](docs/development/ARCHITECTURE.md)
 - [Security](SECURITY.md)
 - [Project expectations](#project-expectations)
 
