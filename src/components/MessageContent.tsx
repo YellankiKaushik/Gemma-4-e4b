@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
-// FR-015 — fenced code blocks render as plain text with a copy action.
+// FR-015 - fenced code blocks render as plain text with a copy action.
 // NFR-SEC-002: model output is never interpreted as HTML.
 
 interface Block {
@@ -38,10 +38,10 @@ function CopyButton({ value, label }: { value: string; label?: string }) {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1400);
             }}
-            className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-border bg-surface-raised px-2 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-border bg-surface-raised px-2.5 text-xs font-medium text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
             {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
-            {label ?? (copied ? "copied" : "copy")}
+            {label ?? (copied ? "Copied" : "Copy")}
         </button>
     );
 }
@@ -53,7 +53,7 @@ function InlineText({ value }: { value: string }) {
                 part.startsWith("`") && part.endsWith("`") && part.length > 1 ? (
                     <code
                         key={index}
-                        className="rounded bg-surface-secondary px-1 py-0.5 font-mono text-[0.875em]"
+                        className="rounded-md bg-surface-secondary px-1.5 py-0.5 font-mono text-[0.875em] text-foreground"
                     >
                         {part.slice(1, -1)}
                     </code>
@@ -78,8 +78,8 @@ function TextBlock({ content }: { content: string }) {
             const level = heading[1]?.length ?? 1;
             const className =
                 level === 1
-                    ? "mt-4 text-lg font-semibold first:mt-0"
-                    : "mt-3 text-base font-semibold first:mt-0";
+                    ? "mt-5 text-lg font-semibold leading-7 first:mt-0"
+                    : "mt-4 text-base font-semibold leading-6 first:mt-0";
             nodes.push(
                 <p key={`heading-${i}`} className={className}>
                     <InlineText value={heading[2] ?? ""} />
@@ -96,7 +96,7 @@ function TextBlock({ content }: { content: string }) {
             }
             i -= 1;
             nodes.push(
-                <ul key={`ul-${i}`} className="my-2 ml-5 list-disc space-y-1">
+                <ul key={`ul-${i}`} className="my-3 ml-5 list-disc space-y-1.5">
                     {items.map((item, index) => (
                         <li key={index}>
                             <InlineText value={item} />
@@ -115,7 +115,7 @@ function TextBlock({ content }: { content: string }) {
             }
             i -= 1;
             nodes.push(
-                <ol key={`ol-${i}`} className="my-2 ml-5 list-decimal space-y-1">
+                <ol key={`ol-${i}`} className="my-3 ml-5 list-decimal space-y-1.5">
                     {items.map((item, index) => (
                         <li key={index}>
                             <InlineText value={item} />
@@ -127,7 +127,7 @@ function TextBlock({ content }: { content: string }) {
         }
 
         nodes.push(
-            <p key={`p-${i}`} className="my-2 whitespace-pre-wrap first:mt-0 last:mb-0">
+            <p key={`p-${i}`} className="my-2.5 whitespace-pre-wrap first:mt-0 last:mb-0">
                 <InlineText value={line.trim()} />
             </p>,
         );
@@ -139,25 +139,25 @@ function TextBlock({ content }: { content: string }) {
 export function MessageContent({ content }: { content: string }) {
     const blocks = parseBlocks(content);
     return (
-        <div className="space-y-3">
+        <div className="space-y-3.5">
             {blocks.map((block, i) =>
                 block.type === "code" ? (
                     <figure
                         key={i}
-                        className="overflow-hidden rounded-lg border border-border bg-surface-secondary"
+                        className="overflow-hidden rounded-2xl border border-border bg-surface-secondary"
                     >
-                        <figcaption className="flex items-center justify-between border-b border-border bg-surface px-3 py-1.5">
+                        <figcaption className="flex items-center justify-between border-b border-border bg-surface-raised px-3 py-2">
                             <span className="font-mono text-xs text-muted-foreground">
                                 {block.lang}
                             </span>
                             <CopyButton value={block.content} />
                         </figcaption>
-                        <pre className="overflow-x-auto p-3 font-mono text-[0.8125rem] leading-relaxed">
+                        <pre className="overflow-x-auto p-3.5 font-mono text-[0.8125rem] leading-6 text-foreground">
                             <code>{block.content.replace(/\n$/, "")}</code>
                         </pre>
                     </figure>
                 ) : (
-                    <div key={i} className="text-[0.9375rem] leading-7">
+                    <div key={i} className="text-[0.9375rem] leading-7 text-foreground">
                         <TextBlock content={block.content} />
                     </div>
                 ),
