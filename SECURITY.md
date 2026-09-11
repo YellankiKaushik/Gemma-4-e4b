@@ -27,4 +27,4 @@ Do not include prompts, conversation history, API keys, or unrelated private inf
 - Ollama endpoints are restricted to `http://localhost:<port>` and `http://127.0.0.1:<port>`.
 - `OLLAMA_ORIGINS` setup commands are displayed for the user to run; the extension does not execute them or modify the operating system.
 
-See [Privacy Policy](PRIVACY_POLICY.md) for data handling and [Architecture](docs/ARCHITECTURE.md) for runtime boundaries.
+See [Privacy Policy](PRIVACY_POLICY.md), [Permissions](docs/security/PERMISSIONS.md), and [Architecture](docs/development/ARCHITECTURE.md) for runtime boundaries.
