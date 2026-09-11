@@ -6,7 +6,7 @@ Local AI Side Panel is a Chrome Manifest V3 extension that communicates with loo
 
 ## Supported version
 
-The current release candidate is v0.1.0. Security fixes should target the current default branch unless a release explicitly states otherwise.
+The current release candidate is v0.1.1. Security fixes should target the current default branch unless a release explicitly states otherwise.
 
 ## Reporting a vulnerability
 
