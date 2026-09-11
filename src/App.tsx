@@ -1,5 +1,15 @@
-import { useEffect, useState } from "react";
-import { Bot, ChevronDown, Menu, PanelLeft, Settings2, WifiOff, X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import {
+    ChevronDown,
+    History,
+    Menu,
+    MessageCircle,
+    PanelLeft,
+    Settings2,
+    Wifi,
+    WifiOff,
+    X,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ChatView } from "@/components/ChatView";
@@ -9,6 +19,15 @@ import { SettingsPanel } from "@/components/SettingsPanel";
 import { useLocalAI } from "@/hooks/useLocalAI";
 import { resolveThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+
+function StatusIndicator({ ready }: { ready: boolean }) {
+    return (
+        <span className="inline-flex items-center gap-2 rounded-full bg-surface-secondary px-2.5 py-1 text-xs text-muted-foreground">
+            <span className={cn("size-2 rounded-full", ready ? "bg-success" : "bg-warning")} />
+            {ready ? "Connected" : "Ollama unavailable"}
+        </span>
+    );
+}
 
 export function App() {
     const ai = useLocalAI();
@@ -44,39 +63,43 @@ export function App() {
         setSidebarOpen(false);
     };
 
-    const navItems: { value: typeof view; label: string }[] = [
-        { value: "chat", label: "Chat" },
-        { value: "history", label: "History" },
-        { value: "settings", label: "Settings" },
+    const navItems: { value: typeof view; label: string; icon: ReactNode }[] = [
+        { value: "chat", label: "Chat", icon: <MessageCircle className="size-4" /> },
+        { value: "history", label: "History", icon: <History className="size-4" /> },
+        { value: "settings", label: "Settings", icon: <Settings2 className="size-4" /> },
     ];
 
     return (
-        <div className="flex h-svh min-h-[560px] overflow-hidden bg-background">
+        <div className="flex h-svh min-h-[560px] overflow-hidden bg-background text-foreground">
             <aside
                 className={cn(
-                    "fixed inset-y-0 left-0 z-30 w-[286px] border-r border-sidebar-border bg-sidebar transition-transform duration-200 min-[580px]:static min-[580px]:translate-x-0",
+                    "fixed inset-y-0 left-0 z-30 w-[302px] border-r border-sidebar-border bg-sidebar transition-transform duration-200 min-[620px]:static min-[620px]:translate-x-0",
                     sidebarOpen ? "translate-x-0" : "-translate-x-full",
                 )}
             >
                 <div className="flex h-full flex-col">
-                    <div className="flex h-[68px] items-center justify-between border-b border-sidebar-border px-4">
-                        <div className="flex items-center gap-3">
-                            <span className="flex size-8 items-center justify-center rounded-lg border border-border bg-surface-raised text-primary">
-                                <Bot className="size-4" />
+                    <div className="flex min-h-[76px] items-center justify-between px-5">
+                        <div className="flex min-w-0 items-center gap-3">
+                            <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-sidebar-accent shadow-subtle ring-1 ring-sidebar-border">
+                                <img
+                                    src="/icons/icon-48.png"
+                                    alt=""
+                                    className="size-7 rounded-lg"
+                                />
                             </span>
-                            <div>
-                                <h1 className="text-sm font-semibold tracking-tight">
+                            <div className="min-w-0">
+                                <h1 className="truncate text-sm font-semibold">
                                     Local AI Side Panel
                                 </h1>
-                                <div className="text-xs text-muted-foreground">
-                                    Local side panel
+                                <div className="truncate text-xs text-muted-foreground">
+                                    Private local chat
                                 </div>
                             </div>
                         </div>
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="min-[580px]:hidden"
+                            className="min-[620px]:hidden"
                             aria-label="Close navigation"
                             onClick={() => setSidebarOpen(false)}
                         >
@@ -84,31 +107,40 @@ export function App() {
                         </Button>
                     </div>
 
-                    <div className="border-b border-sidebar-border p-3">
-                        <Button className="w-full justify-start" onClick={createConversation}>
+                    <div className="px-4 pb-4">
+                        <Button className="w-full justify-center" onClick={createConversation}>
                             <PanelLeft className="size-4" /> New conversation
                         </Button>
                     </div>
 
-                    <div className="flex items-center gap-1 border-b border-sidebar-border p-2">
-                        {navItems.map((item) => (
-                            <button
-                                key={item.value}
-                                type="button"
-                                onClick={() => {
-                                    setView(item.value);
-                                    setSidebarOpen(false);
-                                }}
-                                className={cn(
-                                    "flex-1 rounded-md px-2 py-2 text-center text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                    view === item.value
-                                        ? "bg-sidebar-accent text-sidebar-foreground"
-                                        : "text-muted-foreground hover:text-sidebar-foreground",
-                                )}
-                            >
-                                {item.label}
-                            </button>
-                        ))}
+                    <div className="px-4 pb-3">
+                        <div
+                            className="grid grid-cols-3 gap-1 rounded-full bg-surface-secondary p-1"
+                            role="tablist"
+                            aria-label="Primary views"
+                        >
+                            {navItems.map((item) => (
+                                <button
+                                    key={item.value}
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={view === item.value}
+                                    onClick={() => {
+                                        setView(item.value);
+                                        setSidebarOpen(false);
+                                    }}
+                                    className={cn(
+                                        "flex h-9 items-center justify-center gap-1.5 rounded-full px-2 text-xs font-medium transition-[background-color,color,box-shadow] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                        view === item.value
+                                            ? "bg-sidebar-accent text-sidebar-foreground shadow-subtle"
+                                            : "text-muted-foreground hover:text-sidebar-foreground",
+                                    )}
+                                >
+                                    {item.icon}
+                                    <span className="hidden min-[360px]:inline">{item.label}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="min-h-0 flex-1">
@@ -122,21 +154,17 @@ export function App() {
                         />
                     </div>
 
-                    <div className="border-t border-sidebar-border p-4">
-                        <div className="flex items-center justify-between">
-                            <span className="text-xs text-muted-foreground">Ollama</span>
-                            <span className="flex items-center gap-1.5 text-xs">
-                                <span
-                                    className={cn(
-                                        "size-1.5 rounded-full",
-                                        statusReady ? "bg-success" : "bg-warning",
-                                    )}
-                                />
-                                {statusReady ? "connected" : "offline"}
-                            </span>
-                        </div>
-                        <div className="mt-1 truncate font-mono text-[11px] text-muted-foreground">
-                            {ai.settings.endpoint}
+                    <div className="p-4">
+                        <div className="rounded-[1.375rem] bg-sidebar-accent p-4 shadow-subtle ring-1 ring-sidebar-border">
+                            <div className="flex items-center justify-between gap-3">
+                                <span className="text-xs font-medium text-muted-foreground">
+                                    Ollama
+                                </span>
+                                <StatusIndicator ready={statusReady} />
+                            </div>
+                            <div className="mt-2 truncate font-mono text-[11px] text-muted-foreground">
+                                {ai.settings.endpoint}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,38 +174,39 @@ export function App() {
                 <button
                     type="button"
                     aria-label="Close navigation overlay"
-                    className="fixed inset-0 z-20 bg-background/70 min-[580px]:hidden"
+                    className="fixed inset-0 z-20 bg-background/70 backdrop-blur-sm min-[620px]:hidden"
                     onClick={() => setSidebarOpen(false)}
                 />
             ) : null}
 
-            <main className="flex min-w-0 flex-1 flex-col">
-                <header className="flex min-h-[68px] items-center justify-between border-b border-border bg-surface/85 px-4 backdrop-blur sm:px-6">
+            <main className="flex min-w-0 flex-1 flex-col bg-background">
+                <header className="flex min-h-[76px] items-center justify-between border-b border-border bg-surface/90 px-4 backdrop-blur sm:px-6">
                     <div className="flex min-w-0 items-center gap-3">
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="min-[580px]:hidden"
+                            className="min-[620px]:hidden"
                             aria-label="Open navigation"
                             onClick={() => setSidebarOpen(true)}
                         >
                             <Menu className="size-5" />
                         </Button>
                         <div className="min-w-0">
-                            <div className="truncate text-sm font-semibold">
+                            <div className="truncate text-[0.9375rem] font-semibold">
                                 {view === "settings"
                                     ? "Settings"
-                                    : (activeConversation?.title ?? "New conversation")}
+                                    : view === "history"
+                                      ? "Conversation history"
+                                      : (activeConversation?.title ?? "New conversation")}
                             </div>
-                            <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                            <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
                                 {statusReady ? (
                                     <>
-                                        <span className="size-1.5 rounded-full bg-success" />{" "}
-                                        Connected
+                                        <Wifi className="size-3.5 text-success" /> Connected
                                     </>
                                 ) : (
                                     <>
-                                        <WifiOff className="size-3 text-warning" /> Ollama needs
+                                        <WifiOff className="size-3.5 text-warning" /> Ollama needs
                                         attention
                                     </>
                                 )}
@@ -185,9 +214,9 @@ export function App() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                         {view === "chat" && ai.models.length > 0 ? (
-                            <label className="relative hidden items-center sm:flex">
+                            <label className="relative hidden min-w-0 items-center sm:flex">
                                 <span className="sr-only">Select model</span>
                                 <select
                                     aria-label="Select model"
@@ -195,7 +224,7 @@ export function App() {
                                     onChange={(e) =>
                                         ai.patchSettings({ selectedModel: e.target.value })
                                     }
-                                    className="h-9 max-w-[180px] appearance-none truncate rounded-md border border-border bg-background py-1 pl-3 pr-8 font-mono text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring min-[720px]:max-w-[220px]"
+                                    className="h-10 max-w-[170px] appearance-none truncate rounded-full border border-input bg-background py-1 pl-3.5 pr-9 font-mono text-xs text-foreground shadow-subtle outline-none transition-[border-color,box-shadow] duration-150 focus-visible:border-ring focus-visible:shadow-glow min-[720px]:max-w-[230px]"
                                 >
                                     {ai.models.map((model) => (
                                         <option key={model.name} value={model.name}>
@@ -203,13 +232,14 @@ export function App() {
                                         </option>
                                     ))}
                                 </select>
-                                <ChevronDown className="pointer-events-none absolute right-2 size-3.5 text-muted-foreground" />
+                                <ChevronDown className="pointer-events-none absolute right-3 size-3.5 text-muted-foreground" />
                             </label>
                         ) : null}
                         <Button
                             variant="ghost"
                             size="icon"
                             aria-label="Open settings"
+                            title="Open settings"
                             onClick={() => setView("settings")}
                         >
                             <Settings2 className="size-4" />
@@ -227,16 +257,18 @@ export function App() {
                         onClearAll={() => void ai.clearAll()}
                     />
                 ) : view === "history" ? (
-                    <div className="flex-1 overflow-y-auto p-5 sm:p-6">
+                    <div className="flex-1 overflow-y-auto bg-background p-5 sm:p-7">
                         <div className="mx-auto max-w-3xl">
-                            <div className="mb-5 flex items-end justify-between">
+                            <div className="mb-6 flex items-end justify-between gap-4">
                                 <div>
-                                    <h2 className="text-xl font-semibold">Conversation history</h2>
-                                    <p className="mt-1 text-sm text-muted-foreground">
+                                    <h2 className="text-2xl font-semibold leading-tight">
+                                        Conversation history
+                                    </h2>
+                                    <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
                                         Stored locally in IndexedDB.
                                     </p>
                                 </div>
-                                <span className="text-xs text-muted-foreground">
+                                <span className="shrink-0 rounded-full bg-surface-secondary px-3 py-1.5 text-xs text-muted-foreground">
                                     {ai.conversations.length} threads
                                 </span>
                             </div>
@@ -246,7 +278,7 @@ export function App() {
                                         key={conversation.id}
                                         type="button"
                                         onClick={() => selectConversation(conversation.id)}
-                                        className="flex w-full items-center justify-between rounded-lg border border-border bg-surface px-4 py-3 text-left transition-colors hover:border-primary/50 hover:bg-surface-raised"
+                                        className="flex w-full items-center justify-between gap-4 rounded-2xl bg-surface-secondary px-4 py-3.5 text-left transition-[background-color,box-shadow] duration-150 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                     >
                                         <span className="min-w-0">
                                             <span className="block truncate text-sm font-medium">
@@ -262,7 +294,7 @@ export function App() {
                                     </button>
                                 ))}
                                 {ai.conversations.length === 0 ? (
-                                    <div className="rounded-lg border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+                                    <div className="rounded-[1.75rem] bg-surface-secondary p-10 text-center text-sm text-muted-foreground">
                                         Your local conversations will appear here.
                                     </div>
                                 ) : null}
