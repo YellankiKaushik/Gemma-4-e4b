@@ -47,7 +47,7 @@ Install Ollama from [ollama.com](https://ollama.com/download), start it, and pul
 ollama pull gemma4:e4b
 ```
 
-See [Ollama setup](docs/OLLAMA_SETUP.md) for platform-specific environment configuration.
+See [Ollama setup](docs/getting-started/OLLAMA_SETUP.md) for platform-specific environment configuration.
 
 ### 2. Build the extension
 
@@ -66,7 +66,7 @@ pnpm run build
 4. Select this repository's `dist/` directory.
 5. Click the extension action to open the Side Panel.
 
-The full installation flow, including Ollama origin setup, is in [Installation](docs/INSTALLATION.md).
+The full installation flow, including Ollama origin setup, is in [Installation](docs/getting-started/INSTALLATION.md).
 
 ### 4. Configure the Ollama origin if needed
 
@@ -76,18 +76,21 @@ For development only, Ollama also supports the broader pattern `chrome-extension
 
 ## Documentation
 
-- [Installation](docs/INSTALLATION.md): build, load, update, and first-run steps
-- [Ollama setup](docs/OLLAMA_SETUP.md): local runtime, model, origin, and platform guidance
-- [Troubleshooting](docs/TROUBLESHOOTING.md): common failures and recovery steps
-- [FAQ](docs/FAQ.md): short answers to common usage and privacy questions
-- [Architecture](docs/ARCHITECTURE.md): extension boundaries and data flow
-- [Development](docs/DEVELOPMENT.md): local workflow, tests, and debugging
-- [Releasing](docs/RELEASING.md): release candidate and package workflow
-- [Final release QA](docs/FINAL_RELEASE_QA.md): test the exact generated ZIP before submission
-- [GitHub Release](docs/GITHUB_RELEASE.md): manual GitHub Release handoff steps
-- [Chrome Web Store submission](docs/CHROME_WEB_STORE_SUBMISSION.md): manual store submission checklist
-- [Branding](docs/BRANDING.md): approved v0.1.0 icon assets and remaining store-asset plan
-- [Store screenshots](docs/STORE_SCREENSHOTS.md): screenshot plan for listing assets
+- [Documentation index](docs/README.md): organized guide to the active docs
+- [Installation](docs/getting-started/INSTALLATION.md): build, load, update, and first-run steps
+- [Ollama setup](docs/getting-started/OLLAMA_SETUP.md): local runtime, model, origin, and platform guidance
+- [Ollama connection troubleshooting](docs/troubleshooting/OLLAMA_CONNECTION.md): focused recovery for 403, unavailable runtime, and CUDA failures
+- [Troubleshooting](docs/troubleshooting/TROUBLESHOOTING.md): common failures and recovery steps
+- [Usage](docs/guides/USAGE.md): everyday Side Panel workflows
+- [Models](docs/guides/MODELS.md): model selection and runtime expectations
+- [FAQ](docs/guides/FAQ.md): short answers to common usage and privacy questions
+- [Architecture](docs/development/ARCHITECTURE.md): extension boundaries and data flow
+- [Development](docs/development/DEVELOPMENT.md): local workflow, tests, and debugging
+- [Permissions](docs/security/PERMISSIONS.md): Chrome permissions and host-permission rationale
+- [Releasing](docs/releases/RELEASING.md): release candidate and package workflow
+- [Final release QA](docs/releases/FINAL_RELEASE_QA.md): test the exact generated ZIP before submission
+- [GitHub Release](docs/releases/GITHUB_RELEASE.md): manual GitHub Release handoff steps
+- [Archive](docs/archive/README.md): historical reports and Web Store preparation material
 - [Contributing](CONTRIBUTING.md): how to propose changes
 - [Security](SECURITY.md): vulnerability reporting and security scope
 - [Privacy policy](PRIVACY_POLICY.md): data handling statement
@@ -108,13 +111,13 @@ pnpm run package
 
 `pnpm run package` rebuilds the extension, verifies the production manifest, and creates a ZIP with the extension files at its root. It does not publish anything.
 
-The development server is useful for ordinary browser/component work, but Chrome extension verification should use the built `dist/` directory. See [Development](docs/DEVELOPMENT.md) for the distinction.
+The development server is useful for ordinary browser/component work, but Chrome extension verification should use the built `dist/` directory. See [Development](docs/development/DEVELOPMENT.md) for the distinction.
 
 ## Releases
 
 Release packages are generated locally with `pnpm run package`. The v0.1.1 release candidate package is `Local-AI-Side-Panel-0.1.1.zip`.
 
-Do not create or force-update the `v0.1.1` tag without checking existing tags first. See [Git release tagging](docs/GIT_RELEASE_TAGGING.md) and [GitHub Release](docs/GITHUB_RELEASE.md).
+Do not create or force-update the `v0.1.1` tag without checking existing tags first. See [Git release tagging](docs/development/GIT_RELEASE_TAGGING.md) and [GitHub Release](docs/releases/GITHUB_RELEASE.md).
 
 ## Privacy and permissions
 
@@ -135,7 +138,7 @@ Read the [privacy policy](PRIVACY_POLICY.md) before distributing a build. The pu
 - **HTTP 500:** treat it as a local model/runtime failure; inspect Ollama logs.
 - **CUDA initialization failure:** only for systems that reproduce the issue, try the documented `GGML_CUDA_PDL=0` workaround.
 
-See [Troubleshooting](docs/TROUBLESHOOTING.md) for detailed steps.
+See [Troubleshooting](docs/troubleshooting/TROUBLESHOOTING.md) for detailed steps.
 
 ## Attribution
 
