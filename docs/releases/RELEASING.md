@@ -41,4 +41,4 @@ Before submission:
 - review the privacy declaration against the exact submitted build;
 - confirm the final Web Store extension ID and update the recommended scoped Ollama origin guidance if needed.
 
-See the [Web Store listing draft](CHROME_WEB_STORE_LISTING.md), [privacy draft](CHROME_WEB_STORE_PRIVACY_DRAFT.md), and [asset plan](CHROME_WEB_STORE_ASSETS.md).
+See the archived [Web Store listing draft](../archive/chrome-web-store/CHROME_WEB_STORE_LISTING.md), [privacy draft](../archive/chrome-web-store/CHROME_WEB_STORE_PRIVACY_DRAFT.md), and [asset plan](../archive/chrome-web-store/CHROME_WEB_STORE_ASSETS.md).
