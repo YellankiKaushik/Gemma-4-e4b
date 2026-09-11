@@ -139,11 +139,16 @@ runPnpm(["run", "build"]);
 run(process.execPath, ["scripts/verify-extension-package.mjs"]);
 
 const manifest = JSON.parse(fs.readFileSync(path.join(distDir, "manifest.json"), "utf8"));
-const version = manifest.version ?? "0.1.0";
+const version = manifest.version ?? "0.1.1";
 const zipPath = path.join(releaseDir, `Local-AI-Side-Panel-${version}.zip`);
 const obsoleteZipPath = path.join(releaseDir, `Gemma-Local-AI-${version}.zip`);
 
 fs.mkdirSync(releaseDir, { recursive: true });
+for (const entry of fs.readdirSync(releaseDir)) {
+    if (/^(Local-AI-Side-Panel|Gemma-Local-AI)-.+\.zip$/.test(entry)) {
+        fs.rmSync(path.join(releaseDir, entry), { force: true });
+    }
+}
 fs.rmSync(zipPath, { force: true });
 fs.rmSync(obsoleteZipPath, { force: true });
 
