@@ -32,6 +32,6 @@ No. It does not request `tabs`, `activeTab`, `scripting`, content scripts, or br
 
 Chrome can assign an unpacked extension a development ID that is different from a future Web Store ID. The extension reads `chrome.runtime.id` at runtime and shows the current origin in setup guidance.
 
-## Is the current icon final branding?
+## Is the Chrome Web Store listing published?
 
-The packaged icon is a functional placeholder. See [Store assets](CHROME_WEB_STORE_ASSETS.md) for the independent branding task that remains before publication.
+No. The active project is prepared for local release packaging and manual review. Historical Web Store preparation drafts are preserved in the [Chrome Web Store archive](../archive/chrome-web-store/README.md).
