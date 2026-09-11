@@ -35,8 +35,8 @@ Local-AI-Side-Panel-0.1.1.zip
 - [Chrome Web Store assets](CHROME_WEB_STORE_ASSETS.md)
 - [Permission justifications](WEB_STORE_PERMISSION_JUSTIFICATIONS.md)
 - [Production extension ID QA](PRODUCTION_EXTENSION_ID_QA.md)
-- [Privacy policy](../PRIVACY_POLICY.md)
-- [Support](../SUPPORT.md)
+- [Privacy policy](../../../PRIVACY_POLICY.md)
+- [Support](../../../SUPPORT.md)
 
 Do not invent a Web Store URL before the item exists.
 
